@@ -1,0 +1,28 @@
+{
+  "name": "rlse-workspace",
+  "version": "0.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "turbo dev",
+    "build": "turbo build",
+    "p:core": "pnpm -C packages/core"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@biomejs/biome": "^1.8.2",
+    "turbo": "^2.0.6"
+  },
+  "engines": {
+    "pnpm": "9.5.0",
+    "npm": "please_use_pnpm_instead",
+    "yarn": "please_use_pnpm_instead"
+  },
+  "packageManager": "pnpm@9.5.0",
+  "volta": {
+    "node": "22.1.0",
+    "pnpm": "9.5.0"
+  }
+}

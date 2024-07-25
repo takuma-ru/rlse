@@ -1,0 +1,17 @@
+{
+  "name": "vanilla-ts",
+  "private": true,
+  "version": "0.0.1",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview",
+    "rlse": "pnpm link ../../packages/core && rlse --dry-run"
+  },
+  "devDependencies": {
+    "@takuma-ru/rlse": "workspace:*",
+    "typescript": "^5.2.2",
+    "vite": "^5.3.4"
+  }
+}

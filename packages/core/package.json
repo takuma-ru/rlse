@@ -1,7 +1,48 @@
 {
   "name": "@takuma-ru/rlse",
-  "private": true,
-  "version": "1.0.0",
+  "private": false,
+  "version": "0.0.0",
+  "author": "takuma-ru <takuma-ru@takumaru.dev> (https://github.com/takuma-ru/)",
+  "homepage": "https://github.com/takuma-ru/rlse",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/takuma-ru/rlse"
+  },
+  "bugs": {
+    "url": "https://github.com/takuma-ru/rlse/issues",
+    "email": "takuma-ru@takumaru.dev"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/",
+    "provenance": true
+  },
+  "license": "ISC",
+  "type": "module",
+  "main": "./dist/main.cjs",
+  "module": "./dist/main.js",
+  "types": "./dist/main.d.ts",
+  "bin": {
+    "rlse": "./bin/main.cjs"
+  },
+  "exports": {
+    ".": {
+      "import": {
+        "default": "./dist/main.js",
+        "types": "./dist/main.d.ts"
+      },
+      "require": {
+        "default": "./dist/main.cjs",
+        "types": "./dist/main.d.cts"
+      }
+    }
+  },
+  "files": [
+    "dist",
+    "bin",
+    "LICENSE",
+    "README.md"
+  ],
   "scripts": {
     "build": "tsup",
     "lint": "biome lint --apply ./src",

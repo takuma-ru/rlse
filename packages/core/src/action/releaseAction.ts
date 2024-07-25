@@ -42,7 +42,7 @@ export const releaseAction = async (options: unknown) => {
       {
         successCallback: (stdout) => {
           if (dryRun) {
-            cmd("git reset --soft HEAD~");
+            cmd("git reset --hard HEAD~");
             cmd(`git switch ${baseBranch}`);
             cmd(`git branch -D ${releaseBranch}`);
           }
@@ -56,9 +56,10 @@ export const releaseAction = async (options: unknown) => {
       return consola.error(error.errors.map((e) => e.message).join(", "));
     }
 
-    cmd("git reset --soft HEAD~");
+    cmd("git reset --hard HEAD~");
     cmd(`git switch ${baseBranch}`);
     cmd(`git branch -D ${releaseBranch}`);
-    return consola.error(error);
+    consola.error(error);
+    process.exit(1);
   }
 };

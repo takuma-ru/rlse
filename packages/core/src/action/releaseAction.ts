@@ -51,6 +51,7 @@ export const releaseAction = async (options: unknown) => {
             cmd("git reset --hard HEAD~");
             cmd(`git switch ${baseBranch}`);
             cmd(`git branch -D ${releaseBranch}`);
+            cmd(`git push origin --delete ${releaseBranch}`);
           }
 
           return stdout;
@@ -65,6 +66,8 @@ export const releaseAction = async (options: unknown) => {
     cmd("git reset --hard HEAD~");
     cmd(`git switch ${baseBranch}`);
     cmd(`git branch -D ${releaseBranch}`);
+    cmd(`git push origin --delete ${releaseBranch}`);
+
     consola.error(error);
     process.exit(1);
   }

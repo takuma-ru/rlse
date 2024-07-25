@@ -7,7 +7,13 @@ import { packageVersionUp } from "./packageVersionUp";
 import { findPackageJsonByName } from "./findPackageJsonByName";
 
 export const releaseAction = async (options: unknown) => {
-  const baseBranch = cmd(`git branch --show-current`).trim();
+  const baseBranch = cmd(`git branch --show-current`, {
+    execOptions: {
+      stdio: "pipe",
+      encoding: "utf8",
+    },
+    successCallback: (stdout) => stdout.trim(),
+  });
   const releaseBranch = `release/${new Date()
     .toISOString()
     .replace(/[-:.]/g, "_")}`;

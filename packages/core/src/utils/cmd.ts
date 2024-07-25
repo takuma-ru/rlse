@@ -34,6 +34,6 @@ export const cmd: Cmd = (command, options) => {
       return errorCallback(err);
     }
 
-    throw error;
+    throw new Error(err.message);
   }
 };

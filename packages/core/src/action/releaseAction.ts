@@ -2,7 +2,7 @@ import consola from "consola";
 import { cmd } from "../utils/cmd";
 import { releaseSchema } from "../validation/validation";
 import { findPackageJsonByName } from "./findPackageJsonByName";
-import { packageVersionControl } from "./packageVersionUp";
+import { packageVersionControl } from "./packageVersionControl";
 
 const resetAction = ({
   baseBranch,
@@ -55,14 +55,44 @@ export const releaseAction = async (options: unknown) => {
   try {
     versionUp();
 
-    cmd(`git switch -c ${releaseBranch}`);
-    cmd(`git push --set-upstream origin ${releaseBranch}`);
+    cmd(`git switch -c ${releaseBranch}`, {
+      successCallback: (stdout) => {
+        consola.success(`Switched to ${releaseBranch}`);
+        return stdout;
+      },
+    });
+    cmd(`git push --set-upstream origin ${releaseBranch}`, {
+      successCallback: (stdout) => {
+        consola.success(`Pushed to ${releaseBranch}`);
+        return stdout;
+      },
+    });
 
-    cmd(buildCmd);
+    cmd(buildCmd, {
+      successCallback: (stdout) => {
+        consola.success("Build success");
+        return stdout;
+      },
+    });
 
-    cmd(`git add ${packageJsonPath}`);
-    cmd(`git commit -m "Release ${packageName} ${newVersion}"`);
-    cmd(`git push origin ${releaseBranch}`);
+    cmd(`git add ${packageJsonPath}`, {
+      successCallback: (stdout) => {
+        consola.success(`Added ${packageJsonPath}`);
+        return stdout;
+      },
+    });
+    cmd(`git commit -m "Release ${packageName} ${newVersion}"`, {
+      successCallback: (stdout) => {
+        consola.success(`Committed ${packageName} ${newVersion}`);
+        return stdout;
+      },
+    });
+    cmd(`git push origin ${releaseBranch}`, {
+      successCallback: (stdout) => {
+        consola.success(`Pushed ${packageName} ${newVersion}`);
+        return stdout;
+      },
+    });
 
     cmd(
       `pnpm publish --filter ${packageName} --no-git-checks ${
@@ -70,6 +100,8 @@ export const releaseAction = async (options: unknown) => {
       }`,
       {
         successCallback: (stdout) => {
+          consola.success(`Published ${packageName} ${newVersion}`);
+
           if (dryRun) {
             versionReset();
             resetAction({ baseBranch, releaseBranch });

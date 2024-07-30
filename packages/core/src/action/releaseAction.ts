@@ -33,7 +33,7 @@ export const releaseAction = async (options: unknown) => {
     process.exit(1);
   }
 
-  const baseBranch = cmd(`git branch --show-current`, {
+  const baseBranch = cmd("git branch --show-current", {
     execOptions: {
       stdio: "pipe",
       encoding: "utf8",

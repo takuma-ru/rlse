@@ -54,30 +54,37 @@ export const releaseAction = async (options: unknown) => {
     });
 
   // == Actions ==
-  versionUp();
+  try {
+    versionUp();
 
-  cmd(`git switch -c ${releaseBranch}`);
-  cmd(`git push --set-upstream origin ${releaseBranch}`);
+    cmd(`git switch -c ${releaseBranch}`);
+    cmd(`git push --set-upstream origin ${releaseBranch}`);
 
-  cmd(buildCmd);
+    cmd(buildCmd);
 
-  cmd(`git add ${join(__dirname, packageJsonPath)}`);
-  cmd(`git commit -m "Release ${packageName} ${newVersion}"`);
-  cmd(`git push origin ${releaseBranch}`);
+    cmd(`git add ${join(__dirname, packageJsonPath)}`);
+    cmd(`git commit -m "Release ${packageName} ${newVersion}"`);
+    cmd(`git push origin ${releaseBranch}`);
 
-  cmd(
-    `pnpm publish --filter ${packageName} --no-git-checks ${
-      dryRun ? "--dry-run" : ""
-    }`,
-    {
-      successCallback: (stdout) => {
-        if (dryRun) {
-          versionReset();
-          resetAction({ baseBranch, releaseBranch });
-        }
+    cmd(
+      `pnpm publish --filter ${packageName} --no-git-checks ${
+        dryRun ? "--dry-run" : ""
+      }`,
+      {
+        successCallback: (stdout) => {
+          if (dryRun) {
+            versionReset();
+            resetAction({ baseBranch, releaseBranch });
+          }
 
-        return stdout;
-      },
-    }
-  );
+          return stdout;
+        },
+      }
+    );
+  } catch (error) {
+    consola.error(error);
+    versionReset();
+    resetAction({ baseBranch, releaseBranch });
+    process.exit(1);
+  }
 };

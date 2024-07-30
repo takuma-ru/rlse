@@ -18,3 +18,5 @@ jobs:
       - run: pnpm p:core check
       - run: pnpm build
       - run: pnpm pg:vanilla-ts rlse:test
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

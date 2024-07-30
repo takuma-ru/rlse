@@ -1,6 +1,4 @@
-import { join } from "node:path";
 import consola from "consola";
-import { ZodError } from "zod";
 import { cmd } from "../utils/cmd";
 import { releaseSchema } from "../validation/validation";
 import { findPackageJsonByName } from "./findPackageJsonByName";
@@ -62,7 +60,7 @@ export const releaseAction = async (options: unknown) => {
 
     cmd(buildCmd);
 
-    cmd(`git add ${join(__dirname, packageJsonPath)}`);
+    cmd(`git add ${packageJsonPath}`);
     cmd(`git commit -m "Release ${packageName} ${newVersion}"`);
     cmd(`git push origin ${releaseBranch}`);
 

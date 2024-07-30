@@ -21,7 +21,7 @@ export const packageVersionControl = ({
     },
     errorCallback: (error) => {
       console.error(error.message);
-      return "0.0.0";
+      return packageJson.version;
     },
   });
 

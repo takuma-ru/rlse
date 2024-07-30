@@ -69,6 +69,10 @@ export const releaseAction = async (options: unknown) => {
     });
 
     cmd(buildCmd, {
+      execOptions: {
+        cwd: process.cwd(),
+        encoding: "utf8",
+      },
       successCallback: (stdout) => {
         consola.success("Build success");
         return stdout;

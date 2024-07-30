@@ -9,7 +9,7 @@ program
   .option("-n, --name <name>", "package name")
   .option("--pre", "Release new pre-release")
   .option("-l, --level <patch | minor | major | pre>", "release level")
-  .option("-b, --build-cmd <cmd>", "build command")
+  .option("-c, --build-cmd <cmd>", "build command")
   .option("--dry-run", "dry run")
   .action(async (options) => {
     releaseAction(options);

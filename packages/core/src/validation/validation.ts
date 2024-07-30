@@ -22,4 +22,14 @@ export const releaseSchema = z.object({
   dryRun: z.boolean().optional().default(false),
 });
 
+export const parseReleaseSchema = (options: unknown) => {
+  try {
+    return releaseSchema.parse(options);
+  } catch (error) {
+    if (error instanceof z.ZodError) {
+      console.error(error.errors);
+    }
+  }
+};
+
 export type ReleaseSchemaType = z.infer<typeof releaseSchema>;

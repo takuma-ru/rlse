@@ -4,7 +4,7 @@ import { type ReleaseType, inc } from "semver";
 import { cmd } from "../utils/cmd";
 import type { ReleaseSchemaType } from "../validation/validation";
 
-export const packageVersionUp = ({
+export const packageVersionControl = ({
   level,
   pre,
   packageJsonPath,
@@ -50,14 +50,28 @@ export const packageVersionUp = ({
     }
   };
   const newVersion = inc(currentVersion, getReleaseType(), "beta");
-  packageJson.version = newVersion;
-  writeFileSync(packageJsonPath, JSON.stringify(packageJson, null, 2));
-  packageJson = JSON.parse(readFileSync(packageJsonPath, "utf8"));
 
-  consola.info(`New version: ${packageJson.version}`);
+  const versionUp = () => {
+    packageJson.version = newVersion;
+    writeFileSync(packageJsonPath, JSON.stringify(packageJson, null, 2));
+    packageJson = JSON.parse(readFileSync(packageJsonPath, "utf8"));
+
+    consola.info(`New version: ${packageJson.version}`);
+  };
+
+  const versionReset = () => {
+    packageJson.version = currentVersion;
+    writeFileSync(packageJsonPath, JSON.stringify(packageJson, null, 2));
+    packageJson = JSON.parse(readFileSync(packageJsonPath, "utf8"));
+
+    consola.info(`Reset version: ${packageJson.version}`);
+  };
 
   return {
-    newVersion: packageJson.version as string,
     packageName: packageJson.name as string,
+    currentVersion,
+    newVersion,
+    versionUp,
+    versionReset,
   };
 };

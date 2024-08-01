@@ -8,7 +8,7 @@
     "build": "tsc && vite build",
     "preview": "vite preview",
     "link:core": "pnpm link ../../packages/core",
-    "rlse:test": "link:core && rlse -n vanilla-ts -c \"pnpm build\" -l patch --dry-run"
+    "rlse:test": "pnpm link:core && rlse -n vanilla-ts -c \"pnpm build\" -l patch --dry-run"
   },
   "devDependencies": {
     "@takuma-ru/rlse": "workspace:*",

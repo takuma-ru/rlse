@@ -11,7 +11,7 @@ const resetAction = ({
   baseBranch: string;
   releaseBranch: string;
 }) => {
-  cmd("git reset --hard HEAD~");
+  // cmd("git reset --hard HEAD~");
   cmd(`git switch ${baseBranch}`);
   cmd(`git branch -D ${releaseBranch}`);
   cmd(`git push origin --delete ${releaseBranch}`);

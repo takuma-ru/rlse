@@ -11,6 +11,10 @@
     {
       "name": "p:core",
       "path": "packages/core"
+    },
+    {
+      "name": "pg:vanilla-ts",
+      "path": "playgrounds/vanilla-ts"
     }
   ],
   "settings": {

@@ -7,11 +7,12 @@
     "dev": "vite",
     "build": "tsc && vite build",
     "preview": "vite preview",
-    "rlse:test": "pnpm link ../../packages/core && rlse -n vanilla-ts -c \"pnpm build\" -l patch --dry-run"
+    "link:core": "pnpm link ../../packages/core",
+    "rlse:test": "rlse -n vanilla-ts -c \"pnpm build\" -l patch --dry-run"
   },
   "devDependencies": {
     "@takuma-ru/rlse": "workspace:*",
     "typescript": "^5.2.2",
-    "vite": "^5.3.4"
+    "vite": "^5.3.5"
   }
 }

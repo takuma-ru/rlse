@@ -42,12 +42,6 @@ importers:
         specifier: ^3.23.8
         version: 3.23.8
 
-  playgrounds/vanilla-ts:
-    devDependencies:
-      '@takuma-ru/rlse':
-        specifier: workspace:*
-        version: link:../../packages/core
-
 packages:
 
   '@biomejs/biome@1.8.2':

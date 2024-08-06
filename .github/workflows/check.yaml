@@ -16,9 +16,19 @@ jobs:
         with:
           node-version-file: "package.json"
           cache: "pnpm"
+      - name: Get current branch
+        id: get_branch
+        run: echo "CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD)" >> $GITHUB_ENV
+
+      - name: Display current branch
+        run: echo "Current branch is ${{ env.CURRENT_BRANCH }}"
+
       - run: pnpm i --frozen-lockfile
+
       - run: pnpm p:core check
+
       - run: pnpm build
+
       - run: pnpm pg:vanilla-ts rlse:test
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

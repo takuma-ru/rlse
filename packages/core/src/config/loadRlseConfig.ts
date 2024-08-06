@@ -6,7 +6,7 @@ import {
   rmSync,
   writeFileSync,
 } from "node:fs";
-import path from "node:path";
+import { dirname, extname, resolve } from "node:path";
 import { cwd } from "node:process";
 import { promisify } from "node:util";
 
@@ -21,9 +21,9 @@ const configFiles = [
 
 export const loadRlseConfig = async () => {
   for (const file of configFiles) {
-    const filePath = path.resolve(cwd(), file);
+    const filePath = resolve(cwd(), file);
     if (existsSync(filePath)) {
-      const ext = path.extname(file);
+      const ext = extname(file);
       switch (ext) {
         case ".ts": {
           // TypeScriptファイルの処理
@@ -53,9 +53,9 @@ export const loadRlseConfig = async () => {
 };
 
 const importTypeScriptConfig = async (filePath: string) => {
-  const tempDir = path.resolve(cwd(), ".temp");
-  const tempFilePath = path.resolve(tempDir, "rlse.config.js");
-  const customTsConfigPath = path.resolve(tempDir, "tsconfig.json");
+  const tempDir = resolve(cwd(), ".temp");
+  const tempFilePath = resolve(tempDir, "rlse.config.js");
+  const customTsConfigPath = resolve(tempDir, "tsconfig.json");
 
   // 一時ディレクトリが存在しない場合は作成する
   try {
@@ -70,26 +70,26 @@ const importTypeScriptConfig = async (filePath: string) => {
     customTsConfigPath,
     JSON.stringify({
       compilerOptions: {
-        target: "ES2022",
+        target: "ESNext",
         useDefineForClassFields: true,
-        module: "ESNext",
-        lib: ["ESNext", "DOM", "DOM.Iterable", "ES2022"],
+        module: "esnext",
+        lib: ["ESNext"],
         skipLibCheck: true,
         noErrorTruncation: true,
-
-        /* Bundler mode */
-        moduleResolution: "bundler",
-        resolveJsonModule: true,
-        isolatedModules: true,
-        noEmit: true,
+        noEmit: false,
+        // outFile: tempFilePath,
         outDir: tempDir,
-        rootDir: path.dirname(filePath),
-
-        /* Linting */
+        rootDir: dirname(filePath),
         strict: true,
+        noImplicitAny: false,
         noUnusedLocals: true,
         noUnusedParameters: true,
         noFallthroughCasesInSwitch: true,
+        paths: {
+          "@takuma-ru/rlse": [
+            resolve(cwd(), "node_modules/@takuma-ru/rlse/dist/main.js"),
+          ],
+        },
       },
       exclude: ["node_modules"],
       include: [filePath],
@@ -97,7 +97,9 @@ const importTypeScriptConfig = async (filePath: string) => {
   );
 
   try {
-    execSync(`tsc --project ${customTsConfigPath}`, { stdio: "inherit" });
+    execSync(`tsc --project ${customTsConfigPath}`, {
+      stdio: "inherit",
+    });
     const config = await import(tempFilePath);
     return config.default;
   } catch (error) {

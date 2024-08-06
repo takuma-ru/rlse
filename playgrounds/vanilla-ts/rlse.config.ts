@@ -7,5 +7,5 @@ export default defineConfig({
   pre: false,
   buildCmd: "pnpm build",
   dryRun: true,
-  noRun: true,
+  noRun: false,
 });

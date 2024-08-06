@@ -1,6 +1,5 @@
 import { Command } from "commander";
 
-import consola from "consola";
 import { releaseAction } from "./action/releaseAction";
 import { loadRlseConfig } from "./config/loadRlseConfig";
 
@@ -17,7 +16,6 @@ program
   .option("--no-run", "no run")
   .action(async (options) => {
     const optionFromFile = await loadRlseConfig();
-    consola.info("optionFromFile", optionFromFile);
     const mergedOptions = { ...optionFromFile, ...options };
     releaseAction(mergedOptions);
   });

@@ -1,10 +1,16 @@
 import { execSync } from "node:child_process";
-import fs from "node:fs";
+import {
+  existsSync,
+  mkdirSync,
+  readFile,
+  rmSync,
+  writeFileSync,
+} from "node:fs";
 import path from "node:path";
 import { cwd } from "node:process";
 import { promisify } from "node:util";
 
-const readFile = promisify(fs.readFile);
+const promisifyReadFile = promisify(readFile);
 const configFiles = [
   "rlse.config.ts",
   "rlse.config.js",
@@ -16,24 +22,30 @@ const configFiles = [
 export const loadRlseConfig = async () => {
   for (const file of configFiles) {
     const filePath = path.resolve(cwd(), file);
-    if (fs.existsSync(filePath)) {
+    if (existsSync(filePath)) {
       const ext = path.extname(file);
       switch (ext) {
-        case ".ts":
+        case ".ts": {
           // TypeScriptファイルの処理
           return await importTypeScriptConfig(filePath);
+        }
+
         case ".js":
         case ".mjs":
-        case ".cjs":
+        case ".cjs": {
           // JavaScriptファイルの処理
           return require(filePath);
+        }
+
         case ".json": {
           // JSONファイルの処理
-          const content = await readFile(filePath, "utf-8");
+          const content = await promisifyReadFile(filePath, "utf-8");
           return JSON.parse(content);
         }
-        default:
+
+        default: {
           throw new Error(`Unsupported file extension: ${ext}`);
+        }
       }
     }
   }
@@ -47,14 +59,14 @@ const importTypeScriptConfig = async (filePath: string) => {
 
   // 一時ディレクトリが存在しない場合は作成する
   try {
-    fs.mkdirSync(tempDir, { recursive: true });
+    mkdirSync(tempDir, { recursive: true });
   } catch (error) {
     console.error("Error creating temporary directory:", error);
     throw error;
   }
 
   // カスタムのtsconfig.jsonを作成
-  fs.writeFileSync(
+  writeFileSync(
     customTsConfigPath,
     JSON.stringify({
       compilerOptions: {
@@ -67,12 +79,9 @@ const importTypeScriptConfig = async (filePath: string) => {
 
         /* Bundler mode */
         moduleResolution: "bundler",
-        allowImportingTsExtensions: true,
         resolveJsonModule: true,
         isolatedModules: true,
-        emitDeclarationOnly: true,
-        declaration: true,
-        declarationMap: true,
+        noEmit: true,
         outDir: tempDir,
         rootDir: path.dirname(filePath),
 
@@ -94,5 +103,7 @@ const importTypeScriptConfig = async (filePath: string) => {
   } catch (error) {
     console.error("Error compiling TypeScript file:", error);
     throw error;
+  } finally {
+    rmSync(tempDir, { recursive: true, force: true });
   }
 };

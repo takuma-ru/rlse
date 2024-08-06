@@ -7,11 +7,13 @@ import { packageVersionControl } from "./packageVersionControl";
 const resetAction = ({
   baseBranch,
   releaseBranch,
+  packageJsonPath,
 }: {
   baseBranch: string;
   releaseBranch: string;
+  packageJsonPath: Awaited<ReturnType<typeof findPackageJsonByName>>;
 }) => {
-  // cmd("git reset --hard HEAD~");
+  cmd(`git checkout -- ${packageJsonPath}`);
   cmd(`git switch ${baseBranch}`);
   cmd(`git branch -D ${releaseBranch}`);
   cmd(`git push origin --delete ${releaseBranch}`);
@@ -68,12 +70,11 @@ export const releaseAction = async (options: unknown) => {
     .toISOString()
     .replace(/[-:.]/g, "_")}`;
 
-  const { newVersion, packageName, versionUp, versionReset } =
-    packageVersionControl({
-      level,
-      pre,
-      packageJsonPath,
-    });
+  const { newVersion, packageName, versionUp } = packageVersionControl({
+    level,
+    pre,
+    packageJsonPath,
+  });
 
   // == Actions ==
   try {
@@ -131,8 +132,7 @@ export const releaseAction = async (options: unknown) => {
           consola.success(`Published ${packageName} ${newVersion}`);
 
           if (dryRun) {
-            versionReset();
-            resetAction({ baseBranch, releaseBranch });
+            resetAction({ baseBranch, releaseBranch, packageJsonPath });
           }
 
           return stdout;
@@ -141,8 +141,7 @@ export const releaseAction = async (options: unknown) => {
     );
   } catch (error) {
     consola.error(error);
-    versionReset();
-    resetAction({ baseBranch, releaseBranch });
+    resetAction({ baseBranch, releaseBranch, packageJsonPath });
     process.exit(1);
   }
 };

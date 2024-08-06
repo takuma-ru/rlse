@@ -1,10 +1,10 @@
-import { mkdir, readFileSync, writeFile } from "fs";
-import path from "path";
-import { cwd } from "process";
+import { mkdir, readFileSync, writeFile } from "node:fs";
+import path from "node:path";
+import { cwd } from "node:process";
 import { defineConfig } from "tsup";
 
 export default defineConfig({
-  entry: ["src/main.ts"],
+  entry: ["src/main.ts", "src/bin.ts"],
   format: ["esm", "cjs"],
   splitting: false,
   sourcemap: true,
@@ -19,7 +19,7 @@ export default defineConfig({
       }
     });
 
-    const filesToCopy = ["dist/main.cjs", "dist/main.js"];
+    const filesToCopy = ["dist/bin.cjs", "dist/bin.js"];
 
     for (const file of filesToCopy) {
       const content = await readFileSync(file, { encoding: "utf8" });

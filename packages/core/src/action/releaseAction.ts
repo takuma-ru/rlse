@@ -24,7 +24,12 @@ export const releaseAction = async (options: unknown) => {
     consola.error(error.errors);
     process.exit(1);
   }
-  const { name, pre, level, buildCmd, dryRun } = data;
+  const { name, pre, level, buildCmd, dryRun, noRun } = data;
+
+  if (noRun) {
+    consola.info("No run");
+    process.exit(0);
+  }
 
   // == Package info ==
   const packageJsonPath = await findPackageJsonByName(name);

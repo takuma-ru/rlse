@@ -20,6 +20,7 @@ export const releaseSchema = z.object({
     message: "Invalid build command",
   }),
   dryRun: z.boolean().optional().default(false),
+  noRun: z.boolean().optional().default(false),
 });
 
 export const parseReleaseSchema = (options: unknown) => {

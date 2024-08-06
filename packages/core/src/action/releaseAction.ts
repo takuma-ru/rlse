@@ -59,7 +59,10 @@ export const releaseAction = async (options: unknown) => {
       stdio: "pipe",
       encoding: "utf8",
     },
-    successCallback: (stdout) => stdout.trim(),
+    successCallback: (stdout) => {
+      consola.success(`Base branch: ${stdout}`);
+      return stdout.trim();
+    },
   });
   const releaseBranch = `release/${new Date()
     .toISOString()

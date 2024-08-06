@@ -20,12 +20,7 @@ export const releaseSchema = z.object({
     message: "Invalid build command",
   }),
   gitUserName: z.string().optional(),
-  gitUserEmail: z
-    .string()
-    .regex(
-      /^(?!\.)(?!.*\.\.)([A-Z0-9_+-\.]*)[A-Z0-9_+-]@([A-Z0-9][A-Z0-9\-]*\.)+[A-Z]{2,}$/i
-    )
-    .optional(),
+  gitUserEmail: z.string().optional(),
   dryRun: z.boolean().optional().default(false),
   noRun: z.boolean().optional().default(false),
 });

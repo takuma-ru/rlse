@@ -24,7 +24,16 @@ export const releaseAction = async (options: unknown) => {
     consola.error(error.errors);
     process.exit(1);
   }
-  const { name, pre, level, buildCmd, dryRun, noRun } = data;
+  const {
+    name,
+    pre,
+    level,
+    buildCmd,
+    dryRun,
+    noRun,
+    gitUserName,
+    gitUserEmail,
+  } = data;
 
   if (noRun) {
     consola.info("No run");
@@ -36,6 +45,13 @@ export const releaseAction = async (options: unknown) => {
   if (!packageJsonPath) {
     consola.error(`package.json for ${name} not found`);
     process.exit(1);
+  }
+
+  if (gitUserName) {
+    cmd(`git config --local user.name ${gitUserName}`);
+  }
+  if (gitUserEmail) {
+    cmd(`git config --local user.email ${gitUserEmail}`);
   }
 
   const baseBranch = cmd("git branch --show-current", {

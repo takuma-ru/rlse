@@ -19,6 +19,8 @@ export const releaseSchema = z.object({
   buildCmd: z.string().min(1, {
     message: "Invalid build command",
   }),
+  gitUserName: z.string().optional(),
+  gitUserEmail: z.string().email().optional(),
   dryRun: z.boolean().optional().default(false),
   noRun: z.boolean().optional().default(false),
 });

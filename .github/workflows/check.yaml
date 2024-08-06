@@ -11,17 +11,13 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
+
       - uses: pnpm/action-setup@v4
+
       - uses: actions/setup-node@v4
         with:
           node-version-file: "package.json"
           cache: "pnpm"
-      - name: Get current branch
-        id: get_branch
-        run: echo "CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD)" >> $GITHUB_ENV
-
-      - name: Display current branch
-        run: echo "Current branch is ${{ env.CURRENT_BRANCH }}"
 
       - run: pnpm i --frozen-lockfile
 

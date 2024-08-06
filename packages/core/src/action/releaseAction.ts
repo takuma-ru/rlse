@@ -54,7 +54,7 @@ export const releaseAction = async (options: unknown) => {
     cmd(`git config --local user.email ${gitUserEmail}`);
   }
 
-  const baseBranch = cmd("git rev-parse --abbrev-ref HEAD", {
+  const baseBranch = cmd("git branch --show-current", {
     execOptions: {
       stdio: "pipe",
       encoding: "utf8",

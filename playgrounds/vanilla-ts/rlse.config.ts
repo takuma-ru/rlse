@@ -8,5 +8,5 @@ export default defineConfig({
   gitUserName: "github-actions[bot]",
   gitUserEmail: "41898282+github-actions[bot]@users.noreply.github.com",
   dryRun: true,
-  noRun: false,
+  skipStep: ["config", "commit-changes", "create-release-branch"],
 });

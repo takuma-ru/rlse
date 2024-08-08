@@ -6,6 +6,7 @@ import { defineConfig } from "tsup";
 export default defineConfig({
   entry: ["src/main.ts", "src/bin.ts"],
   format: ["esm", "cjs"],
+  target: "esnext",
   splitting: false,
   sourcemap: true,
   clean: true,

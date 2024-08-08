@@ -23,7 +23,7 @@
   "module": "./dist/main.js",
   "types": "./dist/main.d.ts",
   "bin": {
-    "rlse": "./bin/bin.cjs"
+    "rlse": "./bin/bin.js"
   },
   "exports": {
     ".": {
@@ -53,14 +53,13 @@
   "devDependencies": {
     "@types/node": "^20.14.2",
     "@types/semver": "^7.5.8",
+    "tsup": "^8.1.0",
+    "typescript": "^5.2.2"
+  },
+  "dependencies": {
     "commander": "^12.1.0",
     "consola": "^3.2.3",
     "semver": "^7.6.2",
-    "tsup": "^8.1.0",
-    "typescript": "^5.2.2",
     "zod": "^3.23.8"
-  },
-  "dependencies": {
-    "ts-node": "^10.9.2"
   }
 }

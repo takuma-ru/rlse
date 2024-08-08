@@ -9,6 +9,8 @@ import {
 import { dirname, extname, resolve } from "node:path";
 import { cwd } from "node:process";
 import { promisify } from "node:util";
+import consola from "consola";
+import type { RlseConfig } from "../types/RlseConfig";
 
 const promisifyReadFile = promisify(readFile);
 const configFiles = [
@@ -26,23 +28,20 @@ export const loadRlseConfig = async () => {
       const ext = extname(file);
       switch (ext) {
         case ".ts": {
-          // TypeScriptファイルの処理
           return await importTypeScriptConfig(filePath);
         }
-
         case ".js":
         case ".mjs":
         case ".cjs": {
-          // JavaScriptファイルの処理
-          return require(filePath);
-        }
+          const config = await import(filePath);
 
+          return config.default as RlseConfig;
+        }
         case ".json": {
-          // JSONファイルの処理
           const content = await promisifyReadFile(filePath, "utf-8");
-          return JSON.parse(content);
-        }
 
+          return JSON.parse(content) as RlseConfig;
+        }
         default: {
           throw new Error(`Unsupported file extension: ${ext}`);
         }
@@ -61,7 +60,7 @@ const importTypeScriptConfig = async (filePath: string) => {
   try {
     mkdirSync(tempDir, { recursive: true });
   } catch (error) {
-    console.error("Error creating temporary directory:", error);
+    consola.error("Error creating temporary directory:", error);
     throw error;
   }
 
@@ -101,9 +100,11 @@ const importTypeScriptConfig = async (filePath: string) => {
       stdio: "inherit",
     });
     const config = await import(tempFilePath);
-    return config.default;
+
+    return config.default as RlseConfig;
   } catch (error) {
-    console.error("Error compiling TypeScript file:", error);
+    consola.error("Error compiling TypeScript file:", error);
+
     throw error;
   } finally {
     rmSync(tempDir, { recursive: true, force: true });

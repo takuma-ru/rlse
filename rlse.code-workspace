@@ -13,6 +13,10 @@
       "path": "packages/core"
     },
     {
+      "name": "p:docs",
+      "path": "docs"
+    },
+    {
       "name": "pg:vanilla-ts",
       "path": "playgrounds/vanilla-ts"
     }
@@ -33,7 +37,6 @@
     "[typescriptreact]": {
       "editor.defaultFormatter": "biomejs.biome"
     },
-
     "editor.codeActionsOnSave": {
       "quickfix.biome": "explicit",
       "source.organizeImports.biome": "explicit",

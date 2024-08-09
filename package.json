@@ -7,7 +7,8 @@
     "dev": "turbo dev",
     "build": "turbo build",
     "p:core": "pnpm -C packages/core",
-    "pg:vanilla-ts": "pnpm -C playgrounds/vanilla-ts"
+    "pg:vanilla-ts": "pnpm -C playgrounds/vanilla-ts",
+    "p:docs": "pnpm -C docs"
   },
   "keywords": [],
   "author": "",

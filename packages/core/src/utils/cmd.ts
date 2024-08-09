@@ -10,7 +10,7 @@ type Cmd = (
     execOptions?: ExecSyncOptionsWithStringEncoding;
     successCallback?: (stdout: string) => string;
     errorCallback?: (error: NodeJS.ErrnoException) => string;
-  }
+  },
 ) => string;
 
 export const cmd: Cmd = (command, options) => {

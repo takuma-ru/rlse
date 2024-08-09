@@ -20,7 +20,7 @@ export const packageVersionControl = ({
       return stdout.trim();
     },
     errorCallback: (error) => {
-      console.error(error.message);
+      consola.error(error.message);
       return packageJson.version;
     },
   });

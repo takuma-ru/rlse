@@ -1,6 +1,6 @@
-import { readdir, readFile } from "fs/promises";
-import { join } from "path";
-import { cwd } from "process";
+import { readFile, readdir } from "node:fs/promises";
+import { join } from "node:path";
+import { cwd } from "node:process";
 
 export const findPackageJsonByName = async (
   name: string

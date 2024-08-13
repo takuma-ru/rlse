@@ -4,7 +4,7 @@ import App from "./App.tsx";
 
 import "normalize.css";
 import "github-markdown-css";
-import "./main.css";
+import "./main.css.ts";
 
 // biome-ignore lint/style/noNonNullAssertion: <explanation>
 createRoot(document.getElementById("root")!).render(

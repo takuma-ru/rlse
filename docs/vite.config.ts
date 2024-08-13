@@ -3,6 +3,8 @@ import rehypeShiki from "@shikijs/rehype";
 import { vanillaExtractPlugin } from "@vanilla-extract/vite-plugin";
 import react from "@vitejs/plugin-react";
 import remarkGfm from "remark-gfm";
+import Fonts from "unplugin-fonts/vite";
+import Icons from "unplugin-icons/vite";
 import { defineConfig } from "vite";
 
 // https://vitejs.dev/config/
@@ -10,6 +12,15 @@ export default defineConfig({
   plugins: [
     react(),
     vanillaExtractPlugin(),
+    Fonts({
+      google: {
+        families: ["Open Sans"],
+      },
+    }),
+    Icons({
+      compiler: "jsx",
+      jsx: "react",
+    }),
     {
       enforce: "pre",
       ...mdx({

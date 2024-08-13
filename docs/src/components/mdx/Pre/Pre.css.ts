@@ -1,26 +1,35 @@
 import { style } from "@vanilla-extract/css";
 
+export const preContainer = style({
+  position: "relative",
+  overflow: "auto",
+  margin: "1rem 0",
+});
+
 export const copyButton = style({
   position: "absolute",
-  top: 0,
-  right: 0,
-  padding: "0.5em",
+  top: "0.75rem",
+  right: "0.5rem",
+  padding: "0.25em",
   cursor: "pointer",
-  opacity: 0,
-  transition: "opacity 0.2s",
-  ":hover": {
-    opacity: 1,
+  width: "2rem",
+  height: "2rem",
+  aspectRatio: "1/1",
+  background: "transparent",
+  border: "none",
+  transition: "transform 0.2s ease-in-out",
+  userSelect: "none",
+  ":active": {
+    transform: "scale(0.9)",
   },
 });
 
 export const pre = style({
   position: "relative",
   overflow: "auto",
-  padding: "1em",
+  padding: "1rem",
+  margin: 0,
   border: "1px solid",
   borderColor: "transparent",
-  borderRadius: "0.25em",
-  ":hover": {
-    borderColor: "currentColor",
-  },
+  borderRadius: "0.5em",
 });

@@ -1,20 +1,75 @@
 import clsx from "clsx";
-import type { ClassAttributes, HTMLAttributes } from "react";
-import { copyButton, pre } from "./Pre.css";
+import {
+  Children,
+  type ClassAttributes,
+  type HTMLAttributes,
+  type ReactNode,
+  isValidElement,
+  useState,
+} from "react";
+import { copyButton, pre, preContainer } from "./Pre.css";
+
+import type React from "react";
+import MaterialSymbolsContentCopyOutlineRounded from "~icons/material-symbols/content-copy-outline-rounded";
+import MaterialSymbolsDoneAll from "~icons/material-symbols/done-all";
 
 export const Pre: React.FC<
   JSX.IntrinsicAttributes &
     ClassAttributes<HTMLPreElement> &
     HTMLAttributes<HTMLPreElement>
-> = (properties) => {
+> = ({ children, className, ...attr }) => {
+  const [isCopied, setIsCopied] = useState(false);
+
+  const extractTextFromChildren = (children: ReactNode): string => {
+    let text = "";
+
+    Children.forEach(children, (child) => {
+      if (typeof child === "string" || typeof child === "number") {
+        text += child;
+      } else if (isValidElement(child)) {
+        text += extractTextFromChildren(child.props.children);
+      }
+    });
+
+    return text;
+  };
+
+  const handleCopy = () => {
+    if (isCopied) {
+      return;
+    }
+
+    if (!children) {
+      return;
+    }
+
+    navigator.clipboard
+      .writeText(extractTextFromChildren(children))
+      .then(() => {
+        setIsCopied(true);
+        setTimeout(() => {
+          setIsCopied(false);
+        }, 2000);
+      })
+      .catch(() => {
+        setIsCopied(false);
+      });
+  };
+
   return (
     <>
-      <pre {...properties} className={clsx(pre, properties.className)}>
-        <button className={copyButton} type="button">
-          copy
+      <div className={preContainer}>
+        <pre {...attr} className={clsx(pre, className)}>
+          {children} {/* <code></code> */}
+        </pre>
+        <button className={copyButton} type="button" onClick={handleCopy}>
+          {isCopied ? (
+            <MaterialSymbolsDoneAll />
+          ) : (
+            <MaterialSymbolsContentCopyOutlineRounded />
+          )}
         </button>
-        {properties.children}
-      </pre>
+      </div>
     </>
   );
 };

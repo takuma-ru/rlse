@@ -1,5 +1,16 @@
-import { globalStyle } from "@vanilla-extract/css";
-import { colors } from "./theme.css";
+import { assignVars, globalStyle } from "@vanilla-extract/css";
+import { colorDarkTokens, colorLightTokens, colors } from "./theme.css";
+
+globalStyle(":root", {
+  "@media": {
+    "(prefers-color-scheme: light)": {
+      vars: assignVars(colors, colorLightTokens),
+    },
+    "(prefers-color-scheme: dark)": {
+      vars: assignVars(colors, colorDarkTokens),
+    },
+  },
+});
 
 globalStyle(":root", {
   fontFamily:
@@ -7,19 +18,12 @@ globalStyle(":root", {
   lineHeight: 1.5,
   fontWeight: 500,
   colorScheme: "light dark",
-  color: colors.light.text.primary,
-  backgroundColor: colors.light.background.primary,
+  color: colors.text.primary,
+  backgroundColor: colors.background.primary,
   fontSynthesis: "none",
   textRendering: "optimizeLegibility",
   WebkitFontSmoothing: "antialiased",
   MozOsxFontSmoothing: "grayscale",
-
-  "@media": {
-    "(prefers-color-scheme: dark)": {
-      color: colors.dark.text.primary,
-      backgroundColor: colors.dark.background.primary,
-    },
-  },
 });
 
 globalStyle("*", {
@@ -33,13 +37,12 @@ globalStyle("body", {
 });
 
 globalStyle(".shiki, .shiki span", {
-  backgroundColor: colors.light.background.secondary,
+  fontFamily:
+    "ui-monospace, SFMono-Regular, SF Mono, Menlo, Consolas, Liberation Mono, monospace",
   "@media": {
     "(prefers-color-scheme: dark)": {
-      fontFamily:
-        "ui-monospace, SFMono-Regular, SF Mono, Menlo, Consolas, Liberation Mono, monospace",
       color: "var(--shiki-dark) !important",
-      backgroundColor: `${colors.dark.background.secondary} !important`,
+      backgroundColor: `${colors.background.secondary} !important`,
       fontStyle: "var(--shiki-dark-font-style) !important",
       fontWeight: "var(--shiki-dark-font-weight) !important",
       textDecoration: "var(--shiki-dark-text-decoration) !important",

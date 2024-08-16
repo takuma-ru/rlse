@@ -2,7 +2,7 @@ import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import App from "./App.tsx";
 
-import "normalize.css";
+import "./reset.css";
 import "github-markdown-css";
 import "./main.css.ts";
 

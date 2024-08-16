@@ -57,19 +57,17 @@ export const Pre: React.FC<
   };
 
   return (
-    <>
-      <div className={preContainer}>
-        <pre {...attr} className={clsx(pre, className)}>
-          {children} {/* <code></code> */}
-        </pre>
-        <button className={copyButton} type="button" onClick={handleCopy}>
-          {isCopied ? (
-            <MaterialSymbolsDoneAll />
-          ) : (
-            <MaterialSymbolsContentCopyOutlineRounded />
-          )}
-        </button>
-      </div>
-    </>
+    <div className={preContainer}>
+      <pre {...attr} className={clsx(pre, className)}>
+        {children}
+      </pre>
+      <button className={copyButton} type="button" onClick={handleCopy}>
+        {isCopied ? (
+          <MaterialSymbolsDoneAll />
+        ) : (
+          <MaterialSymbolsContentCopyOutlineRounded />
+        )}
+      </button>
+    </div>
   );
 };

@@ -14,7 +14,7 @@ export default defineConfig({
     vanillaExtractPlugin(),
     Fonts({
       google: {
-        families: ["Open Sans"],
+        families: [{ name: "Open Sans", styles: "wght@0,300..800;1,300..800" }],
       },
     }),
     Icons({

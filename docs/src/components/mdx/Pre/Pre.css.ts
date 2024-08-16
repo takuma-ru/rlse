@@ -20,7 +20,7 @@ export const copyButton = style({
   transition: "transform 0.2s ease-in-out",
   userSelect: "none",
   ":active": {
-    transform: "scale(0.9)",
+    transform: "scale(0.8)",
   },
 });
 

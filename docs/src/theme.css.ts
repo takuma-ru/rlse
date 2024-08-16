@@ -1,9 +1,4 @@
-import {
-  assignVars,
-  createGlobalTheme,
-  createGlobalThemeContract,
-  globalStyle,
-} from "@vanilla-extract/css";
+import { createGlobalThemeContract } from "@vanilla-extract/css";
 
 type GlobalColorTheme = {
   background: {

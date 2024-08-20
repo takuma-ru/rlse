@@ -1,38 +1,35 @@
-# @takuma-ru/rlse
-
-<em>EMEMEMEMEM</em>
-これは普通のテキストです。 _これは斜体のテキストです。_
-
-## Description
-
-## Getting Started
-
-### 1. Install
-
 ```shell
-npm install -D @takuma-ru/rlse
+pnpm add @react-md/app
 ```
 
-```shell
-pnpm add -D @takuma-ru/rlse
-```
-
-### 2. Add script to package.json
-
-```json
+```json filename=src/App.json
 {
-  "scripts": {
-    "rlse": "rlse -n <name> -l <patch | minor | major | pre> -c <build command>"
-  }
+  "title": "App",
+  "menu": "main",
+  "package": "app",
+  "menuIndex": 0
 }
 ```
 
-### 3. Run
+---
 
-```shell
-npm run rlse
+```tsx
+const App = () => {
+  return (
+    <div>
+      <h1>App</h1>
+    </div>
+  );
+};
 ```
 
-## Usage
+---
 
-## License
+```ts
+const meta = {
+  title: "App",
+  menu: "main",
+  package: "app",
+  menuIndex: 0,
+};
+```

@@ -1,5 +1,5 @@
 import mdx from "@mdx-js/rollup";
-import rehypeShiki from "@shikijs/rehype";
+import rehypeShiki, { type RehypeShikiOptions } from "@shikijs/rehype";
 import { vanillaExtractPlugin } from "@vanilla-extract/vite-plugin";
 import react from "@vitejs/plugin-react";
 import remarkGfm from "remark-gfm";
@@ -34,7 +34,35 @@ export default defineConfig({
                 light: "github-light",
                 dark: "github-dark",
               },
-            },
+              transformers: [
+                {
+                  name: "rehype-add-lang-to-pre",
+                  preprocess: (code, option) => {
+                    option.transformers?.find((transformer) => {
+                      if (transformer.name === "rehype-add-lang-to-pre") {
+                        transformer.pre = (node) => {
+                          node.properties.lang = option.lang;
+
+                          return node;
+                        };
+                      }
+                    });
+                    return code;
+                  },
+                },
+              ],
+              parseMetaString: (metaString, _node, _tree) => {
+                const meta = metaString.split(",").reduce((acc, str) => {
+                  if (!str) return acc;
+
+                  const [key, value] = str.split("=");
+                  acc[`data-${key}`] = value;
+                  return acc;
+                }, {} as Record<string, string>);
+
+                return meta;
+              },
+            } as RehypeShikiOptions,
           ],
         ],
       }),

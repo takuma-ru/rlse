@@ -1,17 +1,20 @@
 # @takuma-ru/rlse
 
-
 ## Description
+
+All-in-one release flow execution package.
 
 ## Getting Started
 
 ### 1. Install
+
 ```shell
 npm install @takuma-ru/rlse
 ```
 
 ### 2. Add script to package.json
-```json
+
+```json filename=package.json
 {
   "scripts": {
     "rlse": "rlse -n <name> -l <patch | minor | major | pre> -c <build command>"
@@ -20,10 +23,31 @@ npm install @takuma-ru/rlse
 ```
 
 ### 3. Run
+
 ```shell
 npm run rlse
 ```
 
-## Usage
+## Configure settings via CLI
+
+| Option        | Description   | Type   | Default |
+| ------------- | ------------- | ------ | ------- |
+| -n, --name    | Package name  | string |         |
+| -l, --level   | Release level | string |         |
+| -c, --command | Build command | string |         |
+| ...           |               |        |         |
+
+## Configure settings via Setting file
+
+You can configure it without specifying options in the cli by creating `rlse.config.ts` in the project root.
+In addition to ts, the following file formats are supported.
+
+- `rlse.config.ts`
+- `rlse.config.js`
+  - `rlse.config.mjs`
+  - `rlse.config.cjs`
+- `rlse.config.json`
 
 ## License
+
+[???]()

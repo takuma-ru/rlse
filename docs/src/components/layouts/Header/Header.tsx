@@ -5,7 +5,7 @@ export const Header: FC = () => {
   return (
     <header className={header}>
       <a className={titleAnchor} href="/">
-        <h3 className={titleText}>@takuma-ru/rlse</h3>
+        <h3 className={titleText}>Header{/* @takuma-ru/rlse */}</h3>
       </a>
     </header>
   );

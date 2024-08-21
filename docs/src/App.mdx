@@ -1,35 +1,53 @@
+# @takuma-ru/rlse
+
+## Description
+
+All-in-one release flow execution package.
+
+## Getting Started
+
+### 1. Install
+
 ```shell
-pnpm add @react-md/app
+npm install @takuma-ru/rlse
 ```
 
-```json filename=src/App.json
+### 2. Add script to package.json
+
+```json filename=package.json
 {
-  "title": "App",
-  "menu": "main",
-  "package": "app",
-  "menuIndex": 0
+  "scripts": {
+    "rlse": "rlse -n <name> -l <patch | minor | major | pre> -c <build command>"
+  }
 }
 ```
 
----
+### 3. Run
 
-```tsx
-const App = () => {
-  return (
-    <div>
-      <h1>App</h1>
-    </div>
-  );
-};
+```shell
+npm run rlse
 ```
 
----
+## Configure settings via CLI
 
-```ts
-const meta = {
-  title: "App",
-  menu: "main",
-  package: "app",
-  menuIndex: 0,
-};
-```
+| Option        | Description   | Type   | Default |
+| ------------- | ------------- | ------ | ------- |
+| -n, --name    | Package name  | string |         |
+| -l, --level   | Release level | string |         |
+| -c, --command | Build command | string |         |
+| ...           |               |        |         |
+
+## Configure settings via Setting file
+
+You can configure it without specifying options in the cli by creating `rlse.config.ts` in the project root.
+In addition to ts, the following file formats are supported.
+
+- `rlse.config.ts`
+- `rlse.config.js`
+  - `rlse.config.mjs`
+  - `rlse.config.cjs`
+- `rlse.config.json`
+
+## License
+
+[???]()

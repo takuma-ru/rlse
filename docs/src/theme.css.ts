@@ -1,5 +1,9 @@
 import { createGlobalThemeContract } from "@vanilla-extract/css";
 
+interface NestedObject {
+  [key: string]: string | NestedObject;
+}
+
 type GlobalColorTheme = {
   background: {
     primary: string;
@@ -8,6 +12,7 @@ type GlobalColorTheme = {
   text: {
     primary: string;
     secondary: string;
+    highlight: string;
   };
 };
 
@@ -19,6 +24,7 @@ export const colorLightTokens = {
   text: {
     primary: "#1d1d1d",
     secondary: "#bfbfbf",
+    highlight: "#c66d00ff",
   },
 } as const satisfies GlobalColorTheme;
 
@@ -30,16 +36,27 @@ export const colorDarkTokens = {
   text: {
     primary: "#f6f6f6",
     secondary: "#9b9b9b",
+    highlight: "#ffa332ff",
   },
 } as const satisfies GlobalColorTheme;
 
-export const colors = createGlobalThemeContract({
-  background: {
-    primary: "background-primary",
-    secondary: "background-secondary",
-  },
-  text: {
-    primary: "text-primary",
-    secondary: "text-secondary",
-  },
-});
+export const genThemeContract = (
+  obj: NestedObject,
+  baseKey?: string
+): GlobalColorTheme => {
+  const themeContract: NestedObject = {};
+
+  for (const [key, value] of Object.entries(obj)) {
+    if (typeof value === "string") {
+      themeContract[key] = baseKey ? `${baseKey}-${key}` : key;
+    } else {
+      themeContract[key] = genThemeContract(value, key);
+    }
+  }
+
+  return themeContract as GlobalColorTheme;
+};
+
+export const colors = createGlobalThemeContract(
+  genThemeContract(colorLightTokens)
+);

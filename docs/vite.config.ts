@@ -6,6 +6,7 @@ import remarkGfm from "remark-gfm";
 import Fonts from "unplugin-fonts/vite";
 import Icons from "unplugin-icons/vite";
 import { defineConfig } from "vite";
+import { rehypeInlineCodeLang } from "./config/rehypeInlineCodeLang";
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -27,6 +28,7 @@ export default defineConfig({
         providerImportSource: "@mdx-js/react",
         remarkPlugins: [remarkGfm],
         rehypePlugins: [
+          rehypeInlineCodeLang,
           [
             rehypeShiki,
             {

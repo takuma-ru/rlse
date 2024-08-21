@@ -13,7 +13,7 @@ export const metaContainer = style({
   display: "flex",
   alignItems: "center",
   justifyContent: "space-between",
-  margin: "0.5rem 1rem 0.25rem",
+  margin: "0.5rem 1rem 0",
 });
 
 export const fileNameText = style({
@@ -34,7 +34,7 @@ export const promptText = style({
 
 export const copyButton = style({
   position: "absolute",
-  top: "0.75rem",
+  top: "calc(0.75rem + 0.5rem + 0.75rem)",
   right: "0.5rem",
   padding: "0.25em",
   cursor: "pointer",

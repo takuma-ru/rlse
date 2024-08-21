@@ -3,6 +3,7 @@ import { colors } from "../../../theme.css";
 
 export const header = style({
   position: "sticky",
+  zIndex: "calc(infinity)",
   top: 0,
   left: 0,
   display: "flex",

@@ -39,10 +39,10 @@ globalStyle("body", {
 globalStyle(".shiki, .shiki span", {
   fontFamily:
     "ui-monospace, SFMono-Regular, SF Mono, Menlo, Consolas, Liberation Mono, monospace",
+  backgroundColor: `${colors.background.secondary} !important`,
   "@media": {
     "(prefers-color-scheme: dark)": {
       color: "var(--shiki-dark) !important",
-      backgroundColor: `${colors.background.secondary} !important`,
       fontStyle: "var(--shiki-dark-font-style) !important",
       fontWeight: "var(--shiki-dark-font-weight) !important",
       textDecoration: "var(--shiki-dark-text-decoration) !important",

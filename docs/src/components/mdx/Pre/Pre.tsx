@@ -6,7 +6,6 @@ import {
   type ReactNode,
   isValidElement,
   useEffect,
-  useMemo,
   useRef,
   useState,
 } from "react";
@@ -17,7 +16,6 @@ import {
   metaContainer,
   pre,
   preContainer,
-  promptText,
 } from "./Pre.css";
 
 import type React from "react";
@@ -82,16 +80,16 @@ export const Pre: React.FC<
         <span className={langText}>{lang}</span>
       </div>
       <pre ref={preRef} {...attr} lang={lang} className={clsx(pre, className)}>
-        {lang === "shell" && <span className={promptText}>$</span>}
+        {/* {lang === "shell" && <span className={promptText}>$</span>} */}
         {children}
-        <button className={copyButton} type="button" onClick={handleCopy}>
-          {isCopied ? (
-            <MaterialSymbolsDoneAll />
-          ) : (
-            <MaterialSymbolsContentCopyOutlineRounded />
-          )}
-        </button>
       </pre>
+      <button className={copyButton} type="button" onClick={handleCopy}>
+        {isCopied ? (
+          <MaterialSymbolsDoneAll />
+        ) : (
+          <MaterialSymbolsContentCopyOutlineRounded />
+        )}
+      </button>
     </div>
   );
 };

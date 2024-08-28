@@ -50,4 +50,4 @@ In addition to ts, the following file formats are supported.
 
 ## License
 
-[???]()
+[GNU Lesser General Public License v3.0](https://www.gnu.org/licenses/agpl-3.0.html.en#license-text)

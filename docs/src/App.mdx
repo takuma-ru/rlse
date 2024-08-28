@@ -48,6 +48,24 @@ In addition to ts, the following file formats are supported.
   - `rlse.config.cjs`
 - `rlse.config.json`
 
+```ts filename=rlse.config.ts
+import { defineConfig } from "@takuma-ru/rlse";
+
+export default defineConfig({
+  name: "vanilla-ts",
+  level: "patch",
+  pre: false,
+  buildCmd: "pnpm build",
+  gitUserName: "github-actions[bot]",
+  gitUserEmail: "41898282+github-actions[bot]@users.noreply.github.com",
+  dryRun: true,
+  skipStep: ["config", "commit-changes", "create-release-branch"],
+});
+```
+
 ## License
 
-[???]()
+[GNU Lesser General Public License v3.0](https://www.gnu.org/licenses/agpl-3.0.html.en#license-text)
+
+> [!NOTE]
+> Highlights information that users should take into account, even when skimming.

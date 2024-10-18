@@ -19,12 +19,15 @@ export const metaContainer = style({
 export const fileNameText = style({
   color: colors.text.secondary,
   fontWeight: "bold",
-  fontSize: "0.75rem",
+  fontSize: "0.8rem",
 });
 
 export const langText = style({
+  display: "flex",
+  gap: "0.25rem",
+  alignItems: "center",
   color: colors.text.secondary,
-  fontSize: "0.75rem",
+  fontSize: "0.8rem",
 });
 
 export const promptText = style({

@@ -27,3 +27,9 @@ export const titleText = style({
   fontWeight: "bold",
   margin: 0,
 });
+
+export const links = style({
+  display: "flex",
+  alignItems: "center",
+  gap: "1rem",
+});

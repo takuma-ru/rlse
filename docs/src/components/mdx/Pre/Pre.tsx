@@ -21,6 +21,7 @@ import {
 import type React from "react";
 import MaterialSymbolsContentCopyOutlineRounded from "~icons/material-symbols/content-copy-outline-rounded";
 import MaterialSymbolsDoneAll from "~icons/material-symbols/done-all";
+import { LangIcon } from "./utils/LangIcon";
 
 const extractTextFromChildren = (children: ReactNode): string => {
   let text = "";
@@ -77,7 +78,10 @@ export const Pre: React.FC<
     <div className={preContainer}>
       <div className={metaContainer}>
         <span className={fileNameText}>{fileName}</span>
-        <span className={langText}>{lang}</span>
+        <span className={langText}>
+          <span>{lang}</span>
+          <LangIcon lang={lang} />
+        </span>
       </div>
       <pre ref={preRef} {...attr} lang={lang} className={clsx(pre, className)}>
         {/* {lang === "shell" && <span className={promptText}>$</span>} */}

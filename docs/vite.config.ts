@@ -21,6 +21,7 @@ export default defineConfig({
     Icons({
       compiler: "jsx",
       jsx: "react",
+      autoInstall: true,
     }),
     {
       enforce: "pre",

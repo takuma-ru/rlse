@@ -49,7 +49,7 @@
     "format": "biome format --apply ./src",
     "check": "biome check --apply ./src",
     "start": "node ./dist/main.js",
-    "release": "node ./bin/main.js"
+    "release": "node ./dist/bin.js"
   },
   "devDependencies": {
     "@types/node": "^20.14.2",

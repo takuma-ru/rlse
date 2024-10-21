@@ -39,6 +39,9 @@ jobs:
       - name: Install dependencies
         run: pnpm i --frozen-lockfile
 
+      - name: Build
+        run: pnpm p:core build
+
       - name: Relase
         run: |
           if [ "${{ github.event.inputs.pre }}" == "true" ]; then

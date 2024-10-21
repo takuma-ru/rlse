@@ -30,12 +30,15 @@ npm run rlse
 
 ## Configure settings via CLI
 
-| Option        | Description   | Type   | Default |
-| ------------- | ------------- | ------ | ------- |
-| -n, --name    | Package name  | string |         |
-| -l, --level   | Release level | string |         |
-| -c, --command | Build command | string |         |
-| ...           |               |        |         |
+| Option           | Description                             | Type       | Default |
+| ---------------- | --------------------------------------- | ---------- | ------- |
+| -n, --name       | Package name                            | `string`   |         |
+| -l, --level      | Release level                           | `string`   |         |
+| -c, --command    | Build command                           | `string`   |         |
+| --pre            | Pre-release                             | `boolean`  | `false` |
+| --git-user-name  | git config --local user.name `<name>`   | `string`   |         |
+| --git-user-email | git config --local user.email `<email>` | `string`   |         |
+| -k               | Skip release step                       | `string[]` | `[]`    |
 
 ## Configure settings via Setting file
 
@@ -47,6 +50,8 @@ In addition to ts, the following file formats are supported.
   - `rlse.config.mjs`
   - `rlse.config.cjs`
 - `rlse.config.json`
+
+### Example
 
 ```ts filename=rlse.config.ts
 import { defineConfig } from "@takuma-ru/rlse";
@@ -63,9 +68,29 @@ export default defineConfig({
 });
 ```
 
+### defineConfig Types
+
+```ts
+type RlseConfig = {
+  name?: string | undefined;
+  pre?: boolean | undefined;
+  level?: "patch" | "minor" | "major" | "preup" | undefined;
+  buildCmd?: string | undefined;
+  dryRun?: boolean | undefined;
+  gitUserName?: string | undefined;
+  gitUserEmail?: string | undefined;
+  skipStep?:
+    | (
+        | "config"
+        | "create-release-branch"
+        | "build"
+        | "commit-changes"
+        | "publish"
+      )[]
+    | undefined;
+};
+```
+
 ## License
 
 [GNU Lesser General Public License v3.0](https://www.gnu.org/licenses/agpl-3.0.html.en#license-text)
-
-> [!NOTE]
-> Highlights information that users should take into account, even when skimming.

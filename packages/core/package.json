@@ -48,7 +48,8 @@
     "lint": "biome lint --apply ./src",
     "format": "biome format --apply ./src",
     "check": "biome check --apply ./src",
-    "start": "node ./dist/main.js"
+    "start": "node ./dist/main.js",
+    "release": "node ./bin/main.js"
   },
   "devDependencies": {
     "@types/node": "^20.14.2",

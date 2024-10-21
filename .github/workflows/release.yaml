@@ -1,0 +1,50 @@
+name: Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      pre:
+        description: 'Is this a NEW pre-release?'
+        required: false
+        default: 'false'
+      level:
+        description: 'Release level'
+        required: true
+        default: 'patch'
+        type: choice
+        options:
+          - patch
+          - minor
+          - major
+          - preup
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: ${{ github.head_ref }}
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: package.json
+
+      - uses: pnpm/action-setup@v4
+
+      - name: Install dependencies
+        run: pnpm i --frozen-lockfile
+
+      - name: Relase
+        run: |
+          if [ "${{ github.event.inputs.pre }}" == "true" ]; then
+            pnpm p:core release --level ${{ github.event.inputs.level }} --pre
+          else
+            pnpm p:core release --level ${{ github.event.inputs.level }}
+          fi
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

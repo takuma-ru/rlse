@@ -16,6 +16,7 @@
     "declaration": true,
     "declarationMap": true,
     "declarationDir": "./dist/types",
+    "rootDir": ".",
 
     /* Linting */
     "strict": true,

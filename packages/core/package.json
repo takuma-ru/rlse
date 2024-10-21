@@ -49,9 +49,11 @@
     "format": "biome format --apply ./src",
     "check": "biome check --apply ./src",
     "start": "node ./dist/main.js",
-    "release": "node ./bin/bin.js"
+    "link:core": "pnpm link .",
+    "release": "pnpm link:core && rlse"
   },
   "devDependencies": {
+    "@takuma-ru/rlse": "workspace:*",
     "@types/node": "^20.14.2",
     "@types/semver": "^7.5.8",
     "tsup": "^8.1.0",

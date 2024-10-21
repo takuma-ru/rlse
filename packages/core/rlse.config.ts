@@ -1,4 +1,4 @@
-import { defineConfig } from "./dist/main.js";
+import { defineConfig } from "@takuma-ru/rlse";
 
 export default defineConfig({
   name: "@takuma-ru/rlse",

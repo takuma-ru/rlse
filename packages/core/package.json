@@ -23,7 +23,7 @@
   "module": "./dist/main.js",
   "types": "./dist/main.d.ts",
   "bin": {
-    "rlse": "./bin/main.cjs"
+    "rlse": "./bin/bin.js"
   },
   "exports": {
     ".": {
@@ -48,16 +48,19 @@
     "lint": "biome lint --apply ./src",
     "format": "biome format --apply ./src",
     "check": "biome check --apply ./src",
-    "start": "node ./dist/main.js"
+    "start": "node ./dist/main.js",
+    "release": "node ./bin/main.js"
   },
   "devDependencies": {
     "@types/node": "^20.14.2",
     "@types/semver": "^7.5.8",
+    "tsup": "^8.1.0",
+    "typescript": "^5.2.2"
+  },
+  "dependencies": {
     "commander": "^12.1.0",
     "consola": "^3.2.3",
     "semver": "^7.6.2",
-    "tsup": "^8.1.0",
-    "typescript": "^5.2.2",
     "zod": "^3.23.8"
   }
 }

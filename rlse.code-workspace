@@ -11,6 +11,14 @@
     {
       "name": "p:core",
       "path": "packages/core"
+    },
+    {
+      "name": "p:docs",
+      "path": "docs"
+    },
+    {
+      "name": "pg:vanilla-ts",
+      "path": "playgrounds/vanilla-ts"
     }
   ],
   "settings": {
@@ -29,7 +37,6 @@
     "[typescriptreact]": {
       "editor.defaultFormatter": "biomejs.biome"
     },
-
     "editor.codeActionsOnSave": {
       "quickfix.biome": "explicit",
       "source.organizeImports.biome": "explicit",
@@ -38,6 +45,21 @@
 
     "terminal.integrated.cwd": "${workspaceFolder}",
 
-    "cSpell.words": ["biomejs", "consola", "rlse", "rolldown", "Rspack"]
+    "cSpell.words": [
+      "biomejs",
+      "consola",
+      "rlse",
+      "rolldown",
+      "Rspack",
+      "rehype",
+      "shiki"
+    ],
+
+    "vscode-color-picker.languages": [
+      "javascript",
+      "javascriptreact",
+      "typescript",
+      "typescriptreact"
+    ]
   }
 }

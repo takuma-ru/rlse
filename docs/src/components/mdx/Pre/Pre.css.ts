@@ -46,10 +46,14 @@ export const copyButton = style({
   aspectRatio: "1/1",
   background: "transparent",
   border: "none",
-  transition: "transform 0.2s ease-in-out",
+  opacity: 0.5,
+  transition: "all 0.2s ease-in-out",
   userSelect: "none",
   ":active": {
     transform: "scale(0.8)",
+  },
+  ":hover": {
+    opacity: 1,
   },
 });
 

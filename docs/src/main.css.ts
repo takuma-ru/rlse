@@ -46,6 +46,7 @@ globalStyle("li::marker", {
   fontSize: "0.75em",
 });
 
+// Table styles
 globalStyle("table", {
   marginBlockStart: "1em",
   width: "100%",
@@ -55,9 +56,19 @@ globalStyle("table", {
 });
 
 globalStyle("th", {
-  padding: "0.5em",
+  padding: "0.75rem 0.5em",
   textAlign: "start",
-  borderBottom: `2px solid ${colors.text.secondary}`,
+  backgroundColor: colors.background.secondary,
+});
+
+globalStyle("th:first-child", {
+  borderTopLeftRadius: "0.5rem",
+  borderBottomLeftRadius: "0.5rem",
+});
+
+globalStyle("th:last-child", {
+  borderTopRightRadius: "0.5rem",
+  borderBottomRightRadius: "0.5rem",
 });
 
 globalStyle("td", {
@@ -65,6 +76,7 @@ globalStyle("td", {
   borderBottom: `2px solid ${colors.background.secondary}`,
 });
 
+// Shiki styles
 globalStyle(".shiki, .shiki span", {
   fontFamily:
     "ui-monospace, SFMono-Regular, SF Mono, Menlo, Consolas, Liberation Mono, monospace",

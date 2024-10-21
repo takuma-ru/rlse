@@ -6,7 +6,8 @@ on:
       pre:
         description: 'Is this a NEW pre-release?'
         required: false
-        default: 'false'
+        default: false
+        type: boolean
       level:
         description: 'Release level'
         required: true

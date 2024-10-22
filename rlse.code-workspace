@@ -13,8 +13,16 @@
       "path": "packages/core"
     },
     {
-      "name": "p:docs",
+      "name": "----------",
+      "path": "b"
+    },
+    {
+      "name": "docs",
       "path": "docs"
+    },
+    {
+      "name": "----------",
+      "path": "c"
     },
     {
       "name": "pg:vanilla-ts",

@@ -91,4 +91,4 @@ type RlseConfig = {
 
 ## License
 
-[GNU Lesser General Public License v3.0](https://www.gnu.org/licenses/agpl-3.0.html.en#license-text)
+[Mozilla Public License Version 2.0](https://www.mozilla.org/en-US/MPL/2.0/)

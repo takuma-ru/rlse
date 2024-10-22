@@ -1,5 +1,6 @@
 {
   "name": "@takuma-ru/rlse",
+  "description": "All-in-one release flow execution package",
   "private": false,
   "version": "0.0.0",
   "author": "takuma-ru <takuma-ru@takumaru.dev> (https://github.com/takuma-ru/)",

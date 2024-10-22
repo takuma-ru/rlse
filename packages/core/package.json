@@ -1,7 +1,7 @@
 {
   "name": "@takuma-ru/rlse",
   "private": false,
-  "version": "0.0.0",
+  "version": "0.0.1-beta.0",
   "author": "takuma-ru <takuma-ru@takumaru.dev> (https://github.com/takuma-ru/)",
   "homepage": "https://github.com/takuma-ru/rlse",
   "repository": {

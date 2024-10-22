@@ -15,7 +15,7 @@ export const releaseSchema = z.object({
     ],
     {
       message: "Invalid release level",
-    }
+    },
   ),
   buildCmd: z.string().min(1, {
     message: "Invalid build command",
@@ -34,8 +34,8 @@ export const releaseSchema = z.object({
         ],
         {
           message: "Invalid step name",
-        }
-      )
+        },
+      ),
     )
     .optional(),
   dryRun: z.boolean().optional().default(false),
@@ -44,7 +44,7 @@ export const releaseSchema = z.object({
 export const parseReleaseSchema = (options: unknown) => {
   const { data, error } = releaseSchema.safeParse(options);
   if (error) {
-    consola.error(error.errors.map((e) => e.message).join("\n"));
+    consola.error(error.errors.map(e => e.message).join("\n"));
     process.exit(1);
   }
 

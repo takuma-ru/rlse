@@ -1,6 +1,6 @@
 import {
-  type ExecSyncOptionsWithStringEncoding,
   execSync,
+  type ExecSyncOptionsWithStringEncoding,
 } from "node:child_process";
 import { consola } from "consola";
 
@@ -25,7 +25,8 @@ export const cmd: Cmd = (command, options) => {
     }
 
     return stdout;
-  } catch (error) {
+  }
+  catch (error) {
     const err = error as NodeJS.ErrnoException;
 
     consola.error(err.code ?? "", err.message);

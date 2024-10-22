@@ -1,8 +1,10 @@
 {
   "name": "@takuma-ru/rlse",
-  "private": false,
+  "type": "module",
   "version": "0.0.1-beta.1",
+  "private": false,
   "author": "takuma-ru <takuma-ru@takumaru.dev> (https://github.com/takuma-ru/)",
+  "license": "MPL-2.0",
   "homepage": "https://github.com/takuma-ru/rlse",
   "repository": {
     "type": "git",
@@ -17,52 +19,49 @@
     "registry": "https://registry.npmjs.org/",
     "provenance": true
   },
-  "license": "MPL-2.0",
-  "type": "module",
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/main.d.ts",
+        "default": "./dist/main.js"
+      },
+      "require": {
+        "types": "./dist/main.d.cts",
+        "default": "./dist/main.cjs"
+      }
+    }
+  },
   "main": "./dist/main.cjs",
   "module": "./dist/main.js",
   "types": "./dist/main.d.ts",
   "bin": {
     "rlse": "./bin/bin.js"
   },
-  "exports": {
-    ".": {
-      "import": {
-        "default": "./dist/main.js",
-        "types": "./dist/main.d.ts"
-      },
-      "require": {
-        "default": "./dist/main.cjs",
-        "types": "./dist/main.d.cts"
-      }
-    }
-  },
   "files": [
-    "dist",
-    "bin",
     "LICENSE",
-    "README.md"
+    "README.md",
+    "bin",
+    "dist"
   ],
   "scripts": {
     "build": "tsup",
-    "lint": "biome lint --apply ./src",
-    "format": "biome format --apply ./src",
-    "check": "biome check --apply ./src",
+    "lint": "eslint .",
     "start": "node ./dist/main.js",
     "link:core": "pnpm link .",
     "release": "pnpm link:core && rlse"
-  },
-  "devDependencies": {
-    "@takuma-ru/rlse": "workspace:*",
-    "@types/node": "^20.14.2",
-    "@types/semver": "^7.5.8",
-    "tsup": "^8.1.0",
-    "typescript": "^5.2.2"
   },
   "dependencies": {
     "commander": "^12.1.0",
     "consola": "^3.2.3",
     "semver": "^7.6.2",
     "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "@takuma-ru/config": "workspace:*",
+    "@takuma-ru/rlse": "workspace:*",
+    "@types/node": "^20.14.2",
+    "@types/semver": "^7.5.8",
+    "tsup": "^8.1.0",
+    "typescript": "^5.2.2"
   }
 }

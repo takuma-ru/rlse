@@ -1,9 +1,9 @@
-import { readFile, readdir } from "node:fs/promises";
+import { readdir, readFile } from "node:fs/promises";
 import { join } from "node:path";
 import { cwd } from "node:process";
 
 export const findPackageJsonByName = async (
-  name: string
+  name: string,
 ): Promise<string | null> => {
   async function searchDirectory(directory: string): Promise<string | null> {
     const items = await readdir(directory, { withFileTypes: true });
@@ -14,8 +14,10 @@ export const findPackageJsonByName = async (
       if (item.isDirectory()) {
         const result = await searchDirectory(itemPath);
 
-        if (result) return result;
-      } else if (item.name === "package.json") {
+        if (result)
+          return result;
+      }
+      else if (item.name === "package.json") {
         const content = await readFile(itemPath, "utf8");
         const packageJson = JSON.parse(content);
 

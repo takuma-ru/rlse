@@ -16,7 +16,6 @@ export default defineConfig({
     mkdir(binDir, { recursive: true }, (err) => {
       if (err) {
         console.error(err);
-        return;
       }
     });
 
@@ -37,7 +36,7 @@ export default defineConfig({
             console.error(err);
             throw err;
           }
-        }
+        },
       );
     }
   },

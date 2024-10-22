@@ -1,8 +1,8 @@
+import type { ReleaseSchemaType } from "../validation/validation";
 import { readFileSync, writeFileSync } from "node:fs";
 import consola from "consola";
-import { type ReleaseType, inc } from "semver";
+import { inc, type ReleaseType } from "semver";
 import { cmd } from "../utils/cmd";
-import type { ReleaseSchemaType } from "../validation/validation";
 
 export const packageVersionControl = ({
   level,
@@ -30,15 +30,18 @@ export const packageVersionControl = ({
   const getReleaseType = (): ReleaseType => {
     switch (level) {
       case "patch": {
-        if (pre) return "prepatch";
+        if (pre)
+          return "prepatch";
         return "patch";
       }
       case "minor": {
-        if (pre) return "preminor";
+        if (pre)
+          return "preminor";
         return "minor";
       }
       case "major": {
-        if (pre) return "premajor";
+        if (pre)
+          return "premajor";
         return "major";
       }
       case "preup": {

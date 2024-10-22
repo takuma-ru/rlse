@@ -9,7 +9,8 @@ export const releaseAction = async (options: unknown) => {
   const resetAction = () => {
     if (isCommitChangesStepSkipped) {
       versionReset();
-    } else {
+    }
+    else {
       cmd(`git checkout -- ${packageJsonPath}`);
     }
     if (!isCreateReleaseBranchStepSkipped) {
@@ -75,8 +76,8 @@ export const releaseAction = async (options: unknown) => {
     ? baseBranch
     : `release/${new Date().toISOString().replace(/[-:.]/g, "_")}`;
 
-  const { newVersion, packageName, versionUp, versionReset } =
-    packageVersionControl({
+  const { newVersion, packageName, versionUp, versionReset }
+    = packageVersionControl({
       level,
       pre,
       packageJsonPath,
@@ -150,10 +151,11 @@ export const releaseAction = async (options: unknown) => {
 
             return stdout;
           },
-        }
+        },
       );
     }
-  } catch (error) {
+  }
+  catch (error) {
     consola.error(error);
     resetAction();
     process.exit(1);

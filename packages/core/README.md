@@ -69,7 +69,7 @@ export default defineConfig({
 ### defineConfig Types
 
 ```ts
-type RlseConfig = {
+interface RlseConfig {
   name?: string | undefined;
   pre?: boolean | undefined;
   level?: "patch" | "minor" | "major" | "preup" | undefined;
@@ -79,14 +79,14 @@ type RlseConfig = {
   gitUserEmail?: string | undefined;
   skipStep?:
     | (
-        | "config"
-        | "create-release-branch"
-        | "build"
-        | "commit-changes"
-        | "publish"
-      )[]
+      | "config"
+      | "create-release-branch"
+      | "build"
+      | "commit-changes"
+      | "publish"
+    )[]
     | undefined;
-};
+}
 ```
 
 ## License

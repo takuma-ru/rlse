@@ -8,13 +8,13 @@
     "build": "turbo build",
     "p:core": "pnpm -C packages/core",
     "pg:vanilla-ts": "pnpm -C playgrounds/vanilla-ts",
-    "doc": "pnpm -C docs"
+    "doc": "pnpm -C docs",
+    "cfg": "pnpm -C config"
   },
   "keywords": [],
   "author": "",
   "license": "MPL-2.0",
   "devDependencies": {
-    "@biomejs/biome": "^1.8.2",
     "turbo": "^2.0.6"
   },
   "engines": {

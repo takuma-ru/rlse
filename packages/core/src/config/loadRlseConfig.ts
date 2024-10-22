@@ -1,3 +1,4 @@
+import type { RlseConfig } from "../types/RlseConfig";
 import { execSync } from "node:child_process";
 import {
   existsSync,
@@ -10,7 +11,6 @@ import { dirname, extname, resolve } from "node:path";
 import { cwd } from "node:process";
 import { promisify } from "node:util";
 import consola from "consola";
-import type { RlseConfig } from "../types/RlseConfig";
 
 const promisifyReadFile = promisify(readFile);
 const configFiles = [
@@ -59,7 +59,8 @@ const importTypeScriptConfig = async (filePath: string) => {
   // 一時ディレクトリが存在しない場合は作成する
   try {
     mkdirSync(tempDir, { recursive: true });
-  } catch (error) {
+  }
+  catch (error) {
     consola.error("Error creating temporary directory:", error);
     throw error;
   }
@@ -92,7 +93,7 @@ const importTypeScriptConfig = async (filePath: string) => {
       },
       exclude: ["node_modules"],
       include: [filePath],
-    })
+    }),
   );
 
   try {
@@ -102,11 +103,13 @@ const importTypeScriptConfig = async (filePath: string) => {
     const config = await import(tempFilePath);
 
     return config.default as RlseConfig;
-  } catch (error) {
+  }
+  catch (error) {
     consola.error("Error compiling TypeScript file:", error);
 
     throw error;
-  } finally {
+  }
+  finally {
     rmSync(tempDir, { recursive: true, force: true });
   }
 };

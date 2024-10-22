@@ -12,7 +12,7 @@
   },
   "keywords": [],
   "author": "",
-  "license": "ISC",
+  "license": "LGPLv3",
   "devDependencies": {
     "@biomejs/biome": "^1.8.2",
     "turbo": "^2.0.6"

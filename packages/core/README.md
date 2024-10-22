@@ -1,7 +1,5 @@
 # @takuma-ru/rlse
 
-## Description
-
 All-in-one release flow execution package.
 
 ## Getting Started

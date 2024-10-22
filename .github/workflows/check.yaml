@@ -24,7 +24,7 @@ jobs:
 
       - run: pnpm p:core check
 
-      - run: pnpm build
+      - run: pnpm p:core build
 
       - run: pnpm pg:vanilla-ts rlse:test
         env:

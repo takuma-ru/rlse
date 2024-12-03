@@ -4,10 +4,13 @@ import packageJson from "../package.json";
 import { releaseAction } from "./action/releaseAction";
 import { loadRlseConfig } from "./config/loadRlseConfig";
 
-const program = new Command();
+function collect(value: string, previous: string[]) {
+  return previous.concat([value]);
+}
 
 const thisPackageVersion = packageJson.version as string;
 
+const program = new Command();
 program
   .name("rlse")
   .description("Release npm package")
@@ -21,10 +24,8 @@ program
   .option(
     "-k, --skip-step <<config | create-release-branch | build | commit-changes | publish>...>",
     "Skip release steps",
-    (value, previous: string[]) => {
-      return previous.concat([value]);
-    },
-    undefined,
+    collect,
+    undefined
   )
   .option("--dry-run", "Dry run")
   .action(async (options) => {

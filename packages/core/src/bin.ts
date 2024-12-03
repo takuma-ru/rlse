@@ -5,6 +5,7 @@ import { releaseAction } from "./action/releaseAction";
 import { loadRlseConfig } from "./config/loadRlseConfig";
 
 function collect(value: string, previous: string[]) {
+  // biome-ignore lint/suspicious/noConsoleLog: <explanation>
   console.log(value, previous);
   return previous.concat([value]);
 }

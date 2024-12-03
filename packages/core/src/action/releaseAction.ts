@@ -1,3 +1,4 @@
+import process from "node:process";
 import consola from "consola";
 import { cmd } from "../utils/cmd";
 import { parseReleaseSchema } from "../validation/validation";
@@ -6,19 +7,6 @@ import { getSkipStep } from "./getSkipStep";
 import { packageVersionControl } from "./packageVersionControl";
 
 export const releaseAction = async (options: unknown) => {
-  const resetAction = () => {
-    if (isCommitChangesStepSkipped) {
-      versionReset();
-    } else {
-      cmd(`git checkout -- ${packageJsonPath}`);
-    }
-    if (!isCreateReleaseBranchStepSkipped) {
-      cmd(`git switch ${baseBranch}`);
-      cmd(`git branch -D ${releaseBranch}`);
-      cmd(`git push origin --delete ${releaseBranch}`);
-    }
-  };
-
   // == Validation ==
   const {
     name,
@@ -81,6 +69,19 @@ export const releaseAction = async (options: unknown) => {
       pre,
       packageJsonPath,
     });
+
+  const resetAction = () => {
+    if (isCommitChangesStepSkipped) {
+      versionReset();
+    } else {
+      cmd(`git checkout -- ${packageJsonPath}`);
+    }
+    if (!isCreateReleaseBranchStepSkipped) {
+      cmd(`git switch ${baseBranch}`);
+      cmd(`git branch -D ${releaseBranch}`);
+      cmd(`git push origin --delete ${releaseBranch}`);
+    }
+  };
 
   // == Actions ==
   try {
@@ -150,7 +151,7 @@ export const releaseAction = async (options: unknown) => {
 
             return stdout;
           },
-        }
+        },
       );
     }
   } catch (error) {

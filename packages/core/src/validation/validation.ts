@@ -15,7 +15,7 @@ export const releaseSchema = z.object({
     ],
     {
       message: "Invalid release level",
-    }
+    },
   ),
   buildCmd: z.string().min(1, {
     message: "Invalid build command",
@@ -34,8 +34,8 @@ export const releaseSchema = z.object({
         ],
         {
           message: "Invalid step name",
-        }
-      )
+        },
+      ),
     )
     .optional(),
   dryRun: z.boolean().optional().default(false),

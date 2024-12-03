@@ -4,10 +4,8 @@ import packageJson from "../package.json";
 import { releaseAction } from "./action/releaseAction";
 import { loadRlseConfig } from "./config/loadRlseConfig";
 
-function collect(value: string, previous: string[]) {
-  // biome-ignore lint/suspicious/noConsoleLog: <explanation>
-  console.log(value, previous);
-  return previous.concat([value]);
+function commaSeparatedList(value: string) {
+  return value.split(",");
 }
 
 const thisPackageVersion = packageJson.version as string;
@@ -25,8 +23,8 @@ program
   .option("--git-user-email <email>", "git config --local user.email <email>")
   .option(
     "-k, --skip-step <<config | create-release-branch | build | commit-changes | publish>...>",
-    "Skip release steps",
-    collect,
+    "Skip release steps (comma separated list!)",
+    commaSeparatedList,
     undefined
   )
   .option("--dry-run", "Dry run")

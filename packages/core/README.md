@@ -147,7 +147,8 @@ fixing git access or push the created commit manually.
 
 ### API
 
-Rlse exports `defineConfig`, `presets`, `steps`, `runFlow`, and `z`.
+Rlse exports `defineConfig`, `presets`, `steps`, `runFlow`, `RlseFlowError`,
+`RlseStepError`, and `z`.
 
 #### Presets
 
@@ -237,6 +238,70 @@ Parallel task name lists are recorded in completion order. On failure, only
 successful tasks are rolled back, in reverse completion order.
 
 Custom steps can be added with `(context) => { ... }`.
+
+#### Error Handling
+
+When a step fails, `runFlow()` rolls back completed steps in reverse order and
+then throws `RlseFlowError`. The failed step itself is not rolled back because it
+did not produce a successful result. If a failed step needs to clean up its own
+partial side effects, do that inside `run()` before throwing.
+
+Use `RlseStepError` when a step can expose structured partial results on
+failure.
+
+```ts filename=rlse.config.ts
+import { defineConfig, RlseStepError } from "rlse.ts";
+
+export default defineConfig([
+  {
+    name: "uploadAssets",
+    async run() {
+      const uploaded: string[] = [];
+
+      try {
+        uploaded.push(await uploadFile("dist/index.js"));
+        uploaded.push(await uploadFile("dist/style.css"));
+        await uploadFile("dist/missing-file.js");
+
+        return { uploaded };
+      } catch (error) {
+        await Promise.allSettled(
+          uploaded.map((asset) => deleteUploadedFile(asset)),
+        );
+
+        throw new RlseStepError("Failed to upload assets", {
+          cause: error,
+          partialResult: { uploaded },
+        });
+      }
+    },
+  },
+]);
+```
+
+Programmatic consumers can inspect the flow-level failure.
+
+```ts
+import { RlseFlowError, runFlow } from "rlse.ts";
+
+try {
+  await runFlow(flow);
+} catch (error) {
+  if (error instanceof RlseFlowError) {
+    console.error(error.failed.step);
+    console.error(error.failed.error);
+    console.info(error.failed.partialResult);
+    console.info(error.succeeded.findStep("resolvePackage"));
+    console.info(error.rollbacks);
+    console.info(error.rollbackFailures);
+  }
+}
+```
+
+`error.succeeded` contains steps whose `run()` completed successfully, even if
+their side effects were later rolled back. `error.rollbacks` contains rollback
+attempts for completed steps that define `rollback`; rollback failures are
+recorded without replacing the original step failure.
 
 CLI arguments can be declared with Zod in config and used when building the flow.
 

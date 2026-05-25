@@ -1,4 +1,5 @@
 import consola from "consola";
+import { RlseStepError } from "../../flow/errors";
 import type { RlseStep } from "../../flow/types";
 import { cmdFile } from "../../utils/cmd";
 import { resolveOption, type Resolvable } from "../resolveOption";
@@ -30,8 +31,17 @@ export const verifyPublishedNpmPackage = (options: {
     );
 
     if (publishedVersion !== version) {
-      throw new Error(
+      throw new RlseStepError(
         `Expected ${packageName}@${version}, but registry returned ${publishedVersion}`,
+        {
+          partialResult: {
+            packageName,
+            version,
+            publishedVersion,
+            dryRun: false,
+            verified: false,
+          },
+        },
       );
     }
 
@@ -67,7 +77,7 @@ const resolvePublishedVersionWithRetry = (
         silentError: attempt < maxAttempts,
         errorCallback: (error) => {
           if (attempt === maxAttempts) {
-            throw new Error(error.message);
+            throw new RlseStepError(error.message, { cause: error });
           }
 
           consola.info(
@@ -85,7 +95,14 @@ const resolvePublishedVersionWithRetry = (
     }
   }
 
-  throw new Error(`Unable to verify ${packageName}@${version} on npm`);
+  throw new RlseStepError(`Unable to verify ${packageName}@${version} on npm`, {
+    partialResult: {
+      packageName,
+      version,
+      dryRun: false,
+      verified: false,
+    },
+  });
 };
 
 const wasNpmPublishSkipped = (

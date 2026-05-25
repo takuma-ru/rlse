@@ -1,4 +1,5 @@
 import consola from "consola";
+import { RlseStepError } from "../../flow/errors";
 import type { RlseStep } from "../../flow/types";
 import { cmdFile } from "../../utils/cmd";
 import { getStagedFiles } from "./utils";
@@ -26,7 +27,15 @@ export const commit = (options: {
 
     if (!stagedFiles.length) {
       if (!options.skipIfNoChanges) {
-        throw new Error("No changes to commit");
+        throw new RlseStepError("No changes to commit", {
+          partialResult: {
+            message: options.message,
+            committed: false,
+            stagedFiles,
+            reason: "no_changes",
+            dryRun: false,
+          },
+        });
       }
 
       consola.info("No changes to commit");

@@ -1,4 +1,5 @@
 import consola from "consola";
+import { RlseStepError } from "../../flow/errors";
 import type { RlseStep } from "../../flow/types";
 import { cmdFile } from "../../utils/cmd";
 import { resolveOption, type Resolvable } from "../resolveOption";
@@ -11,7 +12,13 @@ export const stageFiles = (options: {
     const paths = resolveOption(options.paths, context);
 
     if (!paths.length) {
-      throw new Error("Files must be provided before stageFiles");
+      throw new RlseStepError("Files must be provided before stageFiles", {
+        partialResult: {
+          paths,
+          dryRun: context.dryRun,
+          staged: false,
+        },
+      });
     }
 
     if (context.dryRun) {

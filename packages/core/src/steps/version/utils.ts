@@ -1,4 +1,5 @@
 import { type ReleaseType, inc } from "semver";
+import { RlseStepError } from "../../flow/errors";
 import type { ReleaseLevel } from "../../types/RlseConfig";
 import type { PackageJson } from "../package/utils";
 import type { VersionOptions } from "./types";
@@ -16,7 +17,7 @@ export const resolveNextVersion = ({
 }) => {
   if (typeof options.version === "function") {
     if (!packageJson) {
-      throw new Error("Package JSON is required for version resolver");
+      throw new RlseStepError("Package JSON is required for version resolver");
     }
 
     return options.version({
@@ -38,7 +39,16 @@ export const resolveNextVersion = ({
     "beta",
   );
   if (!nextVersion) {
-    throw new Error(`Failed to increment version from ${currentVersion}`);
+    throw new RlseStepError(
+      `Failed to increment version from ${currentVersion}`,
+      {
+        partialResult: {
+          currentVersion,
+          level: options.level,
+          pre,
+        },
+      },
+    );
   }
 
   return nextVersion;
@@ -62,10 +72,10 @@ const getReleaseType = (level?: ReleaseLevel, pre = false): ReleaseType => {
       return "prerelease";
     }
     case "fix": {
-      throw new Error("Version is required for fix level");
+      throw new RlseStepError("Version is required for fix level");
     }
     case undefined: {
-      throw new Error(
+      throw new RlseStepError(
         "Release level is required when version is not configured",
       );
     }

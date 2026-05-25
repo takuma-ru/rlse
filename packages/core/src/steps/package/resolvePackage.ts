@@ -1,3 +1,4 @@
+import { RlseStepError } from "../../flow/errors";
 import type { RlseStep } from "../../flow/types";
 import { findPackageJsonByName } from "../../utils/findPackageJsonByName";
 import { readPackageJson } from "./utils";
@@ -8,7 +9,11 @@ export const resolvePackage = (options: { name: string }): RlseStep => ({
     const packageJsonPath = await findPackageJsonByName(options.name);
 
     if (!packageJsonPath) {
-      throw new Error(`package.json for ${options.name} not found`);
+      throw new RlseStepError(`package.json for ${options.name} not found`, {
+        partialResult: {
+          packageName: options.name,
+        },
+      });
     }
 
     const packageJson = readPackageJson(packageJsonPath);

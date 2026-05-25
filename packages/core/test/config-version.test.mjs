@@ -702,6 +702,10 @@ test("wraps failed steps with partial results in a flow error", async () => {
       assert.equal(error.failed.status, "failed");
       assert.ok(error.failed.error instanceof RlseStepError);
       assert.equal(error.failed.error.cause, cause);
+      assert.equal(Object.hasOwn(error, "cause"), true);
+      assert.equal(Object.hasOwn(error.failed.error, "cause"), true);
+      assert.equal(Object.keys(error).includes("cause"), false);
+      assert.equal(Object.keys(error.failed.error).includes("cause"), false);
       assert.deepEqual(error.failed.partialResult, {
         uploaded: ["dist/index.js"],
       });

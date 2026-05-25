@@ -1,7 +1,7 @@
 import type { RlseResults, RlseStepResult } from "./types";
 
 export class RlseStepError<TPartial = unknown> extends Error {
-  readonly cause: unknown;
+  declare readonly cause: unknown;
   readonly partialResult?: TPartial;
 
   constructor(
@@ -11,9 +11,8 @@ export class RlseStepError<TPartial = unknown> extends Error {
       partialResult?: TPartial;
     } = {},
   ) {
-    super(message);
+    super(message, createErrorOptions(options.cause));
     this.name = "RlseStepError";
-    this.cause = options.cause;
     this.partialResult = options.partialResult;
   }
 }
@@ -55,7 +54,7 @@ export type RlseStepRollbackFailed = {
 export type RlseRollbackResult = RlseStepRolledBack | RlseStepRollbackFailed;
 
 export class RlseFlowError<TPartial = unknown> extends Error {
-  readonly cause: unknown;
+  declare readonly cause: unknown;
   readonly failed: RlseStepFailed<TPartial>;
   readonly succeeded: RlseResults;
   readonly rollbacks: RlseRollbackResult[];
@@ -65,9 +64,10 @@ export class RlseFlowError<TPartial = unknown> extends Error {
     succeeded: RlseResults;
     rollbacks: RlseRollbackResult[];
   }) {
-    super(createFlowErrorMessage(options.failed));
+    super(createFlowErrorMessage(options.failed), {
+      cause: options.failed.error,
+    });
     this.name = "RlseFlowError";
-    this.cause = options.failed.error;
     this.failed = options.failed;
     this.succeeded = options.succeeded;
     this.rollbacks = options.rollbacks;
@@ -89,6 +89,14 @@ const createFlowErrorMessage = (failed: RlseStepFailed) => {
   }
 
   return `Release flow failed at ${failed.step}: ${causeMessage}`;
+};
+
+const createErrorOptions = (cause: unknown) => {
+  if (cause === undefined) {
+    return undefined;
+  }
+
+  return { cause };
 };
 
 const getErrorMessage = (error: unknown) => {

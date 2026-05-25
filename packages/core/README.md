@@ -148,7 +148,8 @@ fixing git access or push the created commit manually.
 ### API
 
 Rlse exports `defineConfig`, `presets`, `steps`, `runFlow`, `RlseFlowError`,
-`RlseStepError`, and `z`.
+`RlseStepError`, `RlseConfigError`, `RlseCliError`, and `z`. It also exports
+the public flow, result, parallel, and rollback types used by these APIs.
 
 #### Presets
 

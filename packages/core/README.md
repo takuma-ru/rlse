@@ -282,6 +282,10 @@ export default defineConfig([
 
 Programmatic consumers can inspect the flow-level failure.
 
+`runFlow()` wraps step failures in `RlseFlowError`. To inspect the original
+thrown value, read `error.failed.error`. For steps that throw `RlseStepError`,
+structured partial data is available at `error.failed.partialResult`.
+
 ```ts
 import { RlseFlowError, runFlow } from "rlse.ts";
 
@@ -303,6 +307,12 @@ try {
 their side effects were later rolled back. `error.rollbacks` contains rollback
 attempts for completed steps that define `rollback`; rollback failures are
 recorded without replacing the original step failure.
+
+`partialResult` is intended for reporting and programmatic recovery. Avoid
+storing secrets or large payloads in it, because CLI output and logs may display
+the value. For `steps.parallel()`, task failures are exposed as a partial
+parallel result on `error.failed.partialResult`; the nested `AggregateError` is
+available as the `cause` of the failed `RlseStepError`.
 
 CLI arguments can be declared with Zod in config and used when building the flow.
 

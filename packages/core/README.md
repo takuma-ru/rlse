@@ -147,7 +147,9 @@ fixing git access or push the created commit manually.
 
 ### API
 
-Rlse exports `defineConfig`, `presets`, `steps`, `runFlow`, and `z`.
+Rlse exports `defineConfig`, `presets`, `steps`, `runFlow`, `RlseFlowError`,
+`RlseStepError`, `RlseConfigError`, `RlseCliError`, and `z`. It also exports
+the public flow, result, parallel, and rollback types used by these APIs.
 
 #### Presets
 
@@ -241,6 +243,80 @@ Parallel task name lists are recorded in completion order. On failure, only
 successful tasks are rolled back, in reverse completion order.
 
 Custom steps can be added with `(context) => { ... }`.
+
+#### Error Handling
+
+When a step fails, `runFlow()` rolls back completed steps in reverse order and
+then throws `RlseFlowError`. The failed step itself is not rolled back because it
+did not produce a successful result. If a failed step needs to clean up its own
+partial side effects, do that inside `run()` before throwing.
+
+Use `RlseStepError` when a step can expose structured partial results on
+failure.
+
+```ts filename=rlse.config.ts
+import { defineConfig, RlseStepError } from "rlse.ts";
+
+export default defineConfig([
+  {
+    name: "uploadAssets",
+    async run() {
+      const uploaded: string[] = [];
+
+      try {
+        uploaded.push(await uploadFile("dist/index.js"));
+        uploaded.push(await uploadFile("dist/style.css"));
+        await uploadFile("dist/missing-file.js");
+
+        return { uploaded };
+      } catch (error) {
+        await Promise.allSettled(
+          uploaded.map((asset) => deleteUploadedFile(asset)),
+        );
+
+        throw new RlseStepError("Failed to upload assets", {
+          cause: error,
+          partialResult: { uploaded },
+        });
+      }
+    },
+  },
+]);
+```
+
+Programmatic consumers can inspect the flow-level failure.
+
+`runFlow()` wraps step failures in `RlseFlowError`. To inspect the original
+thrown value, read `error.failed.error`. For steps that throw `RlseStepError`,
+structured partial data is available at `error.failed.partialResult`.
+
+```ts
+import { RlseFlowError, runFlow } from "rlse.ts";
+
+try {
+  await runFlow(flow);
+} catch (error) {
+  if (error instanceof RlseFlowError) {
+    console.error(error.failed.step);
+    console.error(error.failed.error);
+    console.info(error.failed.partialResult);
+    console.info(error.succeeded.findStep("resolvePackage"));
+    console.info(error.rollbacks);
+    console.info(error.rollbackFailures);
+  }
+}
+```
+
+`error.succeeded` contains steps whose `run()` completed successfully, even if
+their side effects were later rolled back. `error.rollbacks` contains rollback
+attempts for completed steps that define `rollback`; rollback failures are
+recorded without replacing the original step failure.
+
+`partialResult` is intended for reporting and programmatic recovery. Avoid
+storing secrets or large payloads in it, because CLI output and logs may display
+the value. For `steps.parallel()`, task failures are exposed as a partial
+parallel result on `error.failed.partialResult`; the nested `AggregateError` is
+available as the `cause` of the failed `RlseStepError`.
 
 CLI arguments can be declared with Zod in config and used when building the flow.
 

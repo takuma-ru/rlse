@@ -1,4 +1,5 @@
 import consola from "consola";
+import { RlseStepError } from "../../flow/errors";
 import type { RlseStep } from "../../flow/types";
 import { cmdFile } from "../../utils/cmd";
 
@@ -21,7 +22,16 @@ export const checkCleanWorkingTree = (options?: {
       .filter((entry) => !(options?.allowUntracked && entry.startsWith("??")));
 
     if (dirtyEntries.length) {
-      throw new Error(`Working tree is not clean:\n${dirtyEntries.join("\n")}`);
+      throw new RlseStepError(
+        `Working tree is not clean:\n${dirtyEntries.join("\n")}`,
+        {
+          partialResult: {
+            clean: false,
+            allowUntracked: options?.allowUntracked ?? false,
+            dirtyEntries,
+          },
+        },
+      );
     }
 
     consola.success("Working tree is clean");

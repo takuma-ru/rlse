@@ -5,6 +5,7 @@ import {
   execSync,
 } from "node:child_process";
 import { consola } from "consola";
+import { RlseStepError } from "../flow/errors";
 
 type CallbackOptions = {
   successCallback?: (stdout: string) => string;
@@ -45,7 +46,7 @@ const handleCommandError = (
     return errorCallback(err);
   }
 
-  throw new Error(err.message);
+  throw new RlseStepError(err.message, { cause: err });
 };
 
 export const cmd: ShellCmd = (command, options) => {

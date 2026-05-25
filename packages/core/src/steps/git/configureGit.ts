@@ -1,4 +1,5 @@
 import consola from "consola";
+import { RlseStepError } from "../../flow/errors";
 import type { RlseStep } from "../../flow/types";
 import { cmdFile } from "../../utils/cmd";
 
@@ -12,7 +13,7 @@ export const configureGitUser = (
   name: "configureGitUser",
   run: (context) => {
     if (!options.name && !options.email) {
-      throw new Error("Git user name or email must be provided");
+      throw new RlseStepError("Git user name or email must be provided");
     }
 
     if (context.dryRun) {

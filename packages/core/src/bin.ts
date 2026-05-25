@@ -4,6 +4,7 @@ import { z } from "zod";
 import packageJson from "../package.json";
 import { releaseAction } from "./action/releaseAction";
 import { loadRlseConfig } from "./config/loadRlseConfig";
+import { RlseCliError } from "./flow/errors";
 import type { RlseConfig } from "./types/RlseConfig";
 import { parseReleaseSchema } from "./validation/validation";
 
@@ -70,7 +71,7 @@ const assertNotReservedArgName = (name: string) => {
     return;
   }
 
-  throw new Error(
+  throw new RlseCliError(
     `Unsupported CLI argument name: ${name}. --${flagName} is reserved by rlse.`,
   );
 };
@@ -100,7 +101,7 @@ const assertSupportedArgSchema = (name: string, schema: z.ZodTypeAny) => {
     return;
   }
 
-  throw new Error(
+  throw new RlseCliError(
     `Unsupported CLI argument schema for ${name}. Use z.string(), z.enum(), or z.boolean().`,
   );
 };

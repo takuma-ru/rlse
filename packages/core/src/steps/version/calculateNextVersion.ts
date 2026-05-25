@@ -1,4 +1,5 @@
 import { valid } from "semver";
+import { RlseStepError } from "../../flow/errors";
 import type { RlseStep } from "../../flow/types";
 import { resolveNextVersion } from "./utils";
 import type { VersionOptions } from "./types";
@@ -21,7 +22,14 @@ export const calculateNextSemver = (options: VersionOptions): RlseStep => ({
     });
 
     if (!nextVersion || !valid(nextVersion)) {
-      throw new Error(`Invalid version: ${nextVersion}`);
+      throw new RlseStepError(`Invalid version: ${nextVersion}`, {
+        partialResult: {
+          currentVersion,
+          nextVersion,
+          level: options.level,
+          pre,
+        },
+      });
     }
 
     return {

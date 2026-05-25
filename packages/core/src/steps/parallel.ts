@@ -1,4 +1,5 @@
 import consola from "consola";
+import { RlseStepError } from "../flow/errors";
 import type {
   RlseContext,
   RlseParallelResult,
@@ -154,7 +155,12 @@ export const parallel = (options: {
         context,
         completedTasks,
       );
-      throw createParallelError(options.name, taskFailures, rollbackFailures);
+      throw createParallelError(
+        options.name,
+        result,
+        taskFailures,
+        rollbackFailures,
+      );
     }
 
     consola.success(`Parallel step ${options.name} completed`);
@@ -207,7 +213,9 @@ const resolveConcurrency = (
   const resolvedConcurrency = concurrency ?? Math.max(taskCount, 1);
 
   if (!Number.isInteger(resolvedConcurrency) || resolvedConcurrency < 1) {
-    throw new Error("Parallel step concurrency must be a positive integer");
+    throw new RlseStepError(
+      "Parallel step concurrency must be a positive integer",
+    );
   }
 
   return Math.min(resolvedConcurrency, Math.max(taskCount, 1));
@@ -218,7 +226,9 @@ const validateTaskNames = (tasks: ParallelTask[]) => {
 
   for (const task of tasks) {
     if (names.has(task.name)) {
-      throw new Error(`Parallel task names must be unique: ${task.name}`);
+      throw new RlseStepError(
+        `Parallel task names must be unique: ${task.name}`,
+      );
     }
 
     names.add(task.name);
@@ -251,6 +261,7 @@ const rollbackCompletedTasks = async (
 
 const createParallelError = (
   stepName: string,
+  result: RlseParallelResult,
   taskFailures: { name: string; error: unknown }[],
   rollbackFailures: { name: string; error: unknown }[],
 ) => {
@@ -264,8 +275,14 @@ const createParallelError = (
     ? `; rollback failed for: ${rollbackNames}`
     : "";
 
-  return new AggregateError(
-    errors,
+  return new RlseStepError(
     `Parallel step ${stepName} failed for: ${taskNames}${rollbackMessage}`,
+    {
+      cause: new AggregateError(
+        errors,
+        `Parallel step ${stepName} failed for: ${taskNames}${rollbackMessage}`,
+      ),
+      partialResult: result,
+    },
   );
 };

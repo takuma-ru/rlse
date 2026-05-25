@@ -29,7 +29,7 @@ const createResults = (results: RlseStepResult[] = []): RlseResults => {
       const result = results.findLast((item) => item.step === step);
 
       if (!result) {
-        throw new Error(`${step} result was not found`);
+        throw new RlseStepError(`${step} result was not found`);
       }
 
       return result.value;

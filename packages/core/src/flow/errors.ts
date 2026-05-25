@@ -18,6 +18,20 @@ export class RlseStepError<TPartial = unknown> extends Error {
   }
 }
 
+export class RlseConfigError extends Error {
+  constructor(message: string) {
+    super(message);
+    this.name = "RlseConfigError";
+  }
+}
+
+export class RlseCliError extends Error {
+  constructor(message: string) {
+    super(message);
+    this.name = "RlseCliError";
+  }
+}
+
 export type RlseStepFailed<TPartial = unknown> = {
   step: string;
   status: "failed";

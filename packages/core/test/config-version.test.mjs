@@ -622,7 +622,9 @@ test("does not start queued parallel tasks after observing a failure", async () 
 });
 
 test("includes rollback failures in parallel task errors", async () => {
-  const { runFlow, steps } = await import(publicApiPath);
+  const { RlseFlowError, RlseStepError, runFlow, steps } = await import(
+    publicApiPath
+  );
 
   await assert.rejects(
     () =>
@@ -648,12 +650,21 @@ test("includes rollback failures in parallel task errors", async () => {
         }),
       ]),
     (error) => {
-      assert.ok(error instanceof AggregateError);
+      assert.ok(error instanceof RlseFlowError);
+      assert.equal(error.failed.step, "parallelRollbackFailure");
+      assert.ok(error.failed.error instanceof RlseStepError);
+      assert.ok(error.failed.error.cause instanceof AggregateError);
       assert.match(
-        error.message,
+        error.failed.error.cause.message,
         /Parallel step parallelRollbackFailure failed for: task:fail; rollback failed for: task:succeed/,
       );
-      assert.equal(error.errors.length, 2);
+      assert.equal(error.failed.error.cause.errors.length, 2);
+      assert.deepEqual(error.failed.partialResult.failedTaskNames, [
+        "task:fail",
+      ]);
+      assert.deepEqual(error.failed.partialResult.succeededTaskNames, [
+        "task:succeed",
+      ]);
 
       return true;
     },

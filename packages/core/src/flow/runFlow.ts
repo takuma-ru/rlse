@@ -5,6 +5,12 @@ import type {
   RlseStep,
   RlseStepResult,
 } from "./types";
+import {
+  RlseFlowError,
+  RlseStepError,
+  type RlseRollbackResult,
+  type RlseStepFailed,
+} from "./errors";
 
 const normalizeStep = (step: RlseFlowStep): RlseStep => {
   if (typeof step === "function") {
@@ -49,21 +55,66 @@ export const runFlow = async (
   };
   const completedSteps: { step: RlseStep; result: RlseStepResult }[] = [];
 
-  try {
-    for (const flowStep of flow) {
-      const step = normalizeStep(flowStep);
+  for (const flowStep of flow) {
+    const step = normalizeStep(flowStep);
+
+    try {
       const value = await step.run(context);
       const result = { step: step.name, value };
       context.results.push(result);
       completedSteps.push({ step, result });
-    }
-  } catch (error) {
-    for (const { step, result } of completedSteps.reverse()) {
-      await step.rollback?.(context, result);
-    }
+    } catch (error) {
+      const rollbacks = await rollbackCompletedSteps(context, completedSteps);
 
-    throw error;
+      throw new RlseFlowError({
+        failed: createFailedStepResult(step.name, error),
+        succeeded: context.results,
+        rollbacks,
+      });
+    }
   }
 
   return context;
+};
+
+const createFailedStepResult = (
+  step: string,
+  error: unknown,
+): RlseStepFailed => ({
+  step,
+  status: "failed",
+  error,
+  partialResult:
+    error instanceof RlseStepError ? error.partialResult : undefined,
+});
+
+const rollbackCompletedSteps = async (
+  context: RlseContext,
+  completedSteps: { step: RlseStep; result: RlseStepResult }[],
+) => {
+  const rollbacks: RlseRollbackResult[] = [];
+
+  for (const { step, result } of [...completedSteps].reverse()) {
+    if (!step.rollback) {
+      continue;
+    }
+
+    try {
+      await step.rollback(context, result);
+      rollbacks.push({
+        step: step.name,
+        status: "rolledBack",
+        result,
+      });
+    } catch (error) {
+      rollbacks.push({
+        step: step.name,
+        status: "rollbackFailed",
+        result,
+        error,
+      });
+    }
+  }
+
+  return rollbacks;
 };

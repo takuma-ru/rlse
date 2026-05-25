@@ -1,6 +1,11 @@
 import { z } from "zod";
 import { defineConfig } from "./config/defineConfig";
-import { RlseFlowError, RlseStepError } from "./flow/errors";
+import {
+  RlseCliError,
+  RlseConfigError,
+  RlseFlowError,
+  RlseStepError,
+} from "./flow/errors";
 import { runFlow } from "./flow/runFlow";
 import type {
   RlseRollbackResult,
@@ -24,6 +29,8 @@ import * as steps from "./steps/index";
 export {
   defineConfig,
   presets,
+  RlseCliError,
+  RlseConfigError,
   RlseFlowError,
   RlseStepError,
   runFlow,

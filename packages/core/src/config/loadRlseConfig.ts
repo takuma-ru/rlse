@@ -14,6 +14,7 @@ import { dirname, extname, join, resolve } from "node:path";
 import { cwd } from "node:process";
 import { promisify } from "node:util";
 import consola from "consola";
+import { RlseConfigError } from "../flow/errors";
 import type { RlseConfig } from "../types/RlseConfig";
 
 const require = createRequire(import.meta.url);
@@ -46,12 +47,12 @@ export const loadRlseConfig = async () => {
           return JSON.parse(content) as RlseConfig;
         }
         default: {
-          throw new Error(`Unsupported file extension: ${ext}`);
+          throw new RlseConfigError(`Unsupported file extension: ${ext}`);
         }
       }
     }
   }
-  throw new Error("No configuration file found");
+  throw new RlseConfigError("No configuration file found");
 };
 
 const importTypeScriptConfig = async (filePath: string) => {

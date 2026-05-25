@@ -1,4 +1,5 @@
 import path from "node:path";
+import { RlseStepError } from "../flow/errors";
 import type { RlseContext, RlseFlowStep } from "../flow/types";
 import type { PackageJson } from "../steps/package/utils";
 import * as steps from "../steps/index";
@@ -110,7 +111,7 @@ const getResolvePackageResult = (context: RlseContext) => {
   const result = getLatestResult(context, "resolvePackage");
 
   if (!isResolvePackageResult(result)) {
-    throw new Error("resolvePackage result was not found");
+    throw new RlseStepError("resolvePackage result was not found");
   }
 
   return result;
@@ -120,7 +121,7 @@ const getResolvePublishedVersionResult = (context: RlseContext) => {
   const result = getLatestResult(context, "resolvePublishedVersion");
 
   if (!isResolvePublishedVersionResult(result)) {
-    throw new Error("resolvePublishedVersion result was not found");
+    throw new RlseStepError("resolvePublishedVersion result was not found");
   }
 
   return result;
@@ -130,7 +131,7 @@ const getCalculateNextSemverResult = (context: RlseContext) => {
   const result = getLatestResult(context, "calculateNextSemver");
 
   if (!isCalculateNextSemverResult(result)) {
-    throw new Error("calculateNextSemver result was not found");
+    throw new RlseStepError("calculateNextSemver result was not found");
   }
 
   return result;

@@ -9,7 +9,7 @@ import {
 import path from "node:path";
 import test from "node:test";
 
-import { createTempProject, importPublicApi } from "./helpers.mts";
+import { createTempProject, importPublicApi } from "../../test-helpers.mts";
 
 void test("temporarily writes dry-run publish version and restores package json", async () => {
   const projectDir = createTempProject();

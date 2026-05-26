@@ -4,7 +4,7 @@ import { readFileSync, rmSync, writeFileSync } from "node:fs";
 import path from "node:path";
 import test from "node:test";
 
-import { cliPath, createTempProject, publicApiPath } from "./helpers.mts";
+import { cliPath, createTempProject, publicApiPath } from "./test-helpers.mts";
 
 void test("uses config-defined cli args in flow", () => {
   const projectDir = createTempProject();

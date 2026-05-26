@@ -3,7 +3,11 @@ import { execFileSync } from "node:child_process";
 import { rmSync } from "node:fs";
 import test from "node:test";
 
-import { commitAll, createTempProject, importPublicApi } from "./helpers.mts";
+import {
+  commitAll,
+  createTempProject,
+  importPublicApi,
+} from "../../test-helpers.mts";
 
 void test("restores base branch after skipping an existing release branch", async () => {
   const projectDir = createTempProject();

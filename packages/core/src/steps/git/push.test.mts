@@ -5,7 +5,11 @@ import { tmpdir } from "node:os";
 import path from "node:path";
 import test from "node:test";
 
-import { commitAll, createTempProject, importPublicApi } from "./helpers.mts";
+import {
+  commitAll,
+  createTempProject,
+  importPublicApi,
+} from "../../test-helpers.mts";
 
 void test("skips pushing existing git branches when requested", async () => {
   const projectDir = createTempProject();

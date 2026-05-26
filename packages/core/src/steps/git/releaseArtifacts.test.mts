@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 
-import { importPublicApi } from "./helpers.mts";
+import { importPublicApi } from "../../test-helpers.mts";
 
 void test("builds rerunnable release branch names from environment variables", async () => {
   const previousRunId = process.env.GITHUB_RUN_ID;

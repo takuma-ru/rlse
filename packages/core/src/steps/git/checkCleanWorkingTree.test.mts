@@ -2,7 +2,11 @@ import assert from "node:assert/strict";
 import { rmSync } from "node:fs";
 import test from "node:test";
 
-import { commitAll, createTempProject, importPublicApi } from "./helpers.mts";
+import {
+  commitAll,
+  createTempProject,
+  importPublicApi,
+} from "../../test-helpers.mts";
 
 void test("checks for a clean working tree", async () => {
   const projectDir = createTempProject();

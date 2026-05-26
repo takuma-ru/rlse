@@ -10,7 +10,7 @@ import {
 import path from "node:path";
 import test from "node:test";
 
-import { cliPath, createTempProject, packageRoot } from "./helpers.mts";
+import { cliPath, createTempProject, packageRoot } from "../test-helpers.mts";
 
 void test("loads TypeScript config", () => {
   const projectDir = createTempProject();

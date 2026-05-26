@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 
-import { importPublicApi } from "./helpers.mts";
+import { importPublicApi } from "../../test-helpers.mts";
 
 void test("skips github release creation during dry-run", async () => {
   const { runFlow, steps } = await importPublicApi();

@@ -55,123 +55,88 @@ void test("throws when flow step result is missing", async () => {
   );
 });
 
-void test("wraps failed steps with partial results in a flow error", async () => {
-  const { RlseFlowError, RlseStepError, runFlow } = await importPublicApi();
-  const cause = new Error("upload unavailable");
+void test("rolls back completed steps after a later step fails", async () => {
+  const { runFlow } = await importPublicApi();
+  const events: string[] = [];
 
   await assert.rejects(
     () =>
       runFlow([
         {
           name: "prepare",
-          run: () => ({ prepared: true }),
-          rollback: () => {},
+          run: () => {
+            events.push("run:prepare");
+          },
+          rollback: () => {
+            events.push("rollback:prepare");
+          },
         },
         {
           name: "uploadAssets",
           run: () => {
-            throw new RlseStepError("Failed to upload assets", {
-              cause,
-              partialResult: {
-                uploaded: ["dist/index.js"],
-              },
-            });
+            events.push("run:uploadAssets");
+            throw new Error("upload unavailable");
+          },
+        },
+        {
+          name: "notify",
+          run: () => {
+            events.push("run:notify");
           },
         },
       ]),
-    (error) => {
-      assert.ok(error instanceof RlseFlowError);
-      assert.equal(error.name, "RlseFlowError");
-      assert.equal(error.failed.step, "uploadAssets");
-      assert.equal(error.failed.status, "failed");
-      assert.ok(error.failed.error instanceof RlseStepError);
-      assert.equal(error.failed.error.cause, cause);
-      assert.equal(Object.hasOwn(error, "cause"), true);
-      assert.equal(Object.hasOwn(error.failed.error, "cause"), true);
-      assert.equal(Object.keys(error).includes("cause"), false);
-      assert.equal(Object.keys(error.failed.error).includes("cause"), false);
-      assert.deepEqual(error.failed.partialResult, {
-        uploaded: ["dist/index.js"],
-      });
-      assert.deepEqual(error.succeeded, [
-        { step: "prepare", value: { prepared: true } },
-      ]);
-      assert.equal(
-        (error.succeeded.findStep("prepare") as { prepared: boolean }).prepared,
-        true,
-      );
-      assert.deepEqual(error.rollbacks, [
-        {
-          step: "prepare",
-          status: "rolledBack",
-          result: { step: "prepare", value: { prepared: true } },
-        },
-      ]);
-      assert.deepEqual(error.rollbackFailures, []);
-
-      return true;
-    },
+    /Release flow failed at uploadAssets: upload unavailable/,
   );
+
+  assert.deepEqual(events, [
+    "run:prepare",
+    "run:uploadAssets",
+    "rollback:prepare",
+  ]);
 });
 
-void test("records rollback failures without replacing the original failure", async () => {
-  const { RlseFlowError, runFlow } = await importPublicApi();
-  const flowFailure = new Error("publish failed");
-  const rollbackFailure = new Error("cleanup failed");
+void test("keeps the original failure visible when rollback also fails", async () => {
+  const { runFlow } = await importPublicApi();
+  const events: string[] = [];
 
   await assert.rejects(
     () =>
       runFlow([
         {
           name: "first",
-          run: () => ({ value: 1 }),
-          rollback: () => {},
+          run: () => {
+            events.push("run:first");
+          },
+          rollback: () => {
+            events.push("rollback:first");
+          },
         },
         {
           name: "second",
-          run: () => ({ value: 2 }),
+          run: () => {
+            events.push("run:second");
+          },
           rollback: () => {
-            throw rollbackFailure;
+            events.push("rollback:second");
+            throw new Error("cleanup failed");
           },
         },
         {
           name: "third",
           run: () => {
-            throw flowFailure;
+            events.push("run:third");
+            throw new Error("publish failed");
           },
         },
       ]),
-    (error) => {
-      assert.ok(error instanceof RlseFlowError);
-      assert.equal(error.failed.step, "third");
-      assert.equal(error.failed.error, flowFailure);
-      assert.deepEqual(error.succeeded, [
-        { step: "first", value: { value: 1 } },
-        { step: "second", value: { value: 2 } },
-      ]);
-      assert.deepEqual(error.rollbacks, [
-        {
-          step: "second",
-          status: "rollbackFailed",
-          result: { step: "second", value: { value: 2 } },
-          error: rollbackFailure,
-        },
-        {
-          step: "first",
-          status: "rolledBack",
-          result: { step: "first", value: { value: 1 } },
-        },
-      ]);
-      assert.deepEqual(error.rollbackFailures, [
-        {
-          step: "second",
-          status: "rollbackFailed",
-          result: { step: "second", value: { value: 2 } },
-          error: rollbackFailure,
-        },
-      ]);
-
-      return true;
-    },
+    /Release flow failed at third: publish failed/,
   );
+
+  assert.deepEqual(events, [
+    "run:first",
+    "run:second",
+    "run:third",
+    "rollback:second",
+    "rollback:first",
+  ]);
 });

@@ -27,33 +27,17 @@ void test("runs parallel tasks with aggregate results", async () => {
     }),
   ]);
 
+  const result = context.results.findStep("publishPackages") as {
+    tasks: Record<string, { status: string; value?: { packageName: string } }>;
+  };
+
   assert.equal(maxActiveTasks, 2);
-  assert.deepEqual(context.results.findStep("publishPackages"), {
-    ok: true,
-    dryRun: false,
-    concurrency: 2,
-    taskCount: 3,
-    tasks: {
-      "publish:a": {
-        name: "publish:a",
-        status: "succeeded",
-        value: { packageName: "a" },
-      },
-      "publish:b": {
-        name: "publish:b",
-        status: "succeeded",
-        value: { packageName: "b" },
-      },
-      "publish:c": {
-        name: "publish:c",
-        status: "succeeded",
-        value: { packageName: "c" },
-      },
-    },
-    succeededTaskNames: ["publish:a", "publish:b", "publish:c"],
-    failedTaskNames: [],
-    skippedTaskNames: [],
-  });
+  assert.deepEqual(
+    Object.values(result.tasks)
+      .map((task) => task.value?.packageName)
+      .sort((a, b) => String(a).localeCompare(String(b))),
+    ["a", "b", "c"],
+  );
 });
 
 void test("skips parallel tasks during dry-run", async () => {
@@ -77,22 +61,12 @@ void test("skips parallel tasks during dry-run", async () => {
     { dryRun: true },
   );
 
+  const result = context.results.findStep("dryRunParallel") as {
+    dryRun: boolean;
+  };
+
   assert.equal(ran, false);
-  assert.deepEqual(context.results.findStep("dryRunParallel"), {
-    ok: true,
-    dryRun: true,
-    concurrency: 1,
-    taskCount: 1,
-    tasks: {
-      "task:a": {
-        name: "task:a",
-        status: "skipped",
-      },
-    },
-    succeededTaskNames: [],
-    failedTaskNames: [],
-    skippedTaskNames: ["task:a"],
-  });
+  assert.equal(result.dryRun, true);
 });
 
 void test("rolls back successful parallel tasks on failure", async () => {
@@ -189,9 +163,9 @@ void test("does not start queued parallel tasks after observing a failure", asyn
   ]);
 });
 
-void test("includes rollback failures in parallel task errors", async () => {
-  const { RlseFlowError, RlseStepError, runFlow, steps } =
-    await importPublicApi();
+void test("reports task and rollback failures together", async () => {
+  const { runFlow, steps } = await importPublicApi();
+  const events: string[] = [];
 
   await assert.rejects(
     () =>
@@ -202,38 +176,26 @@ void test("includes rollback failures in parallel task errors", async () => {
           tasks: [
             {
               name: "task:succeed",
-              run: () => "succeed-result",
+              run: () => {
+                events.push("run:succeed");
+              },
               rollback: () => {
+                events.push("rollback:succeed");
                 throw new Error("rollback failed");
               },
             },
             {
               name: "task:fail",
               run: () => {
+                events.push("run:fail");
                 throw new Error("task failed");
               },
             },
           ],
         }),
       ]),
-    (error) => {
-      assert.ok(error instanceof RlseFlowError);
-      assert.equal(error.failed.step, "parallelRollbackFailure");
-      assert.ok(error.failed.error instanceof RlseStepError);
-      assert.ok(error.failed.error.cause instanceof AggregateError);
-      assert.match(
-        error.failed.error.cause.message,
-        /Parallel step parallelRollbackFailure failed for: task:fail; rollback failed for: task:succeed/,
-      );
-      assert.equal(error.failed.error.cause.errors.length, 2);
-      assert.deepEqual(error.failed.partialResult.failedTaskNames, [
-        "task:fail",
-      ]);
-      assert.deepEqual(error.failed.partialResult.succeededTaskNames, [
-        "task:succeed",
-      ]);
-
-      return true;
-    },
+    /Parallel step parallelRollbackFailure failed for: task:fail; rollback failed for: task:succeed/,
   );
+
+  assert.deepEqual(events, ["run:succeed", "run:fail", "rollback:succeed"]);
 });

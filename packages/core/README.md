@@ -1,11 +1,11 @@
 # rlse.ts
 
-**TypeScript release workflow runner with reusable safety steps.**
+**TypeScript release workflow runner with an `rlse` CLI and reusable steps.**
 
-Rlse is for package authors who want release flows to be explicit code, not a
-large CLI preset or a one-off `scripts/release.ts`. Start with a preset, then add
-or reorder typed steps for checks, versioning, publishing, tags, changelogs, and
-GitHub Releases.
+Rlse is for package authors who want a small CLI entrypoint backed by explicit
+TypeScript release flows, not a large CLI preset or a one-off
+`scripts/release.ts`. Start with a preset, then add or reorder typed steps for
+checks, versioning, publishing, tags, changelogs, and GitHub Releases.
 
 - Safer than a one-off `release.ts`: reusable steps, rollback hooks, dry-run, and
   typed step results.

@@ -4,7 +4,11 @@ import { readFileSync, rmSync, writeFileSync } from "node:fs";
 import path from "node:path";
 import test from "node:test";
 
-import { cliPath, createTempProject, publicApiPath } from "./helpers.mts";
+import {
+  cliPath,
+  createTempProject,
+  publicApiPath,
+} from "../../test-helpers.mts";
 
 void test("uses version generator from rlse config", () => {
   const projectDir = createTempProject();

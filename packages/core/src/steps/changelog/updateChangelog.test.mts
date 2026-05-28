@@ -3,7 +3,7 @@ import { readFileSync, rmSync, writeFileSync } from "node:fs";
 import path from "node:path";
 import test from "node:test";
 
-import { createTempProject, importPublicApi } from "./helpers.mts";
+import { createTempProject, importPublicApi } from "../../test-helpers.mts";
 
 void test("updates changelog and rolls it back when a later step fails", async () => {
   const projectDir = createTempProject();

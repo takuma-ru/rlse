@@ -40,7 +40,7 @@
   },
   "scripts": {
     "build": "tsup",
-    "test": "pnpm build && node --test ./test/*.test.mts",
+    "test": "pnpm build && node --test \"./src/**/*.test.mts\"",
     "lint": "pnpm exec oxlint --config ../../oxlint.config.ts .",
     "lint:fix": "pnpm exec oxlint --config ../../oxlint.config.ts --fix .",
     "format": "pnpm exec oxfmt --config ../../oxfmt.config.ts .",

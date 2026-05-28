@@ -4,7 +4,7 @@ import { tmpdir } from "node:os";
 import path from "node:path";
 import { pathToFileURL } from "node:url";
 
-type PublicApi = typeof import("../src/main.ts");
+type PublicApi = typeof import("./main.ts");
 
 export const packageRoot = path.resolve(import.meta.dirname, "..");
 export const cliPath = path.join(packageRoot, "bin", "bin.js");
